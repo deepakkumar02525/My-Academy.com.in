@@ -1,0 +1,973 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+  <title>करेंट अफेयर्स</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@400;600;700;800&display=swap');
+
+    :root{
+      --bg:#dfe9fb;
+      --card:#ffffff;
+      --text:#222;
+      --muted:#6b7280;
+      --accent:#2563eb;
+      --ok:#16a34a;
+      --bad:#dc2626;
+      --border:#e5e7eb;
+      --radius:14px;
+      --space:14px;
+
+      /* Base font sizes (mobile-first) */
+      --fs-body:19px;
+      --fs-label:19px;
+      --fs-h1:27px;
+      --fs-brand:31px; /* ~2pt (≈2.66px) बड़ा than h1 */
+      --fs-btn:19px;
+    }
+    @media (min-width:480px){
+      :root{
+        --fs-body:19px;
+        --fs-label:20px;
+        --fs-h1:29px;
+        --fs-brand:33px;
+        --fs-btn:19px;
+      }
+    }
+    @media (min-width:768px){
+      :root{
+        --fs-body:19px;
+        --fs-label:21px;
+        --fs-h1:31px;
+        --fs-brand:35px;
+        --fs-btn:19px;
+      }
+    }
+
+    *{box-sizing:border-box}
+    html {
+      height: 100%;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    html::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+      display: none;
+    }
+    body{
+      margin:0;
+      padding:8px 14px 24px;
+      min-height:100vh;
+      font-family:"Noto Serif Devanagari","Sanskrit Text","Noto Sans Devanagari","Nirmala UI",Mangal,serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.5;
+      font-size:var(--fs-body);
+      box-sizing:border-box;
+      overflow-x:hidden;
+      overflow-y:auto;
+      scrollbar-width:none;
+      -ms-overflow-style:none;
+      -webkit-text-size-adjust:100%;
+      text-rendering:optimizeLegibility;
+    }
+    body::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+      display: none;
+    }
+    .site-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      max-width:980px;
+      margin:0 auto;
+      position:relative;
+    }
+    .brand{
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      font-weight:800;
+      color:#ef4444; /* red */
+      font-size:var(--fs-brand);
+      letter-spacing:.2px;
+    }
+    .social-links{
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      gap:8px;
+      margin-left:auto;
+    }
+    .social-link{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:38px;
+      height:38px;
+      border-radius:50%;
+      color:#fff;
+      text-decoration:none;
+      transition:transform .15s ease, box-shadow .15s ease;
+    }
+    .social-link:hover{
+      transform:translateY(-1px);
+      box-shadow:0 5px 12px rgba(15,23,42,.2);
+    }
+    .social-link svg{
+      width:21px;
+      height:21px;
+      fill:currentColor;
+    }
+    .youtube-link{ background:#ef4444; }
+    .telegram-link{ background:#0ea5e9; }
+    .whatsapp-link{ background:#22c55e; }
+    .social-link:focus-visible{
+      outline:3px solid rgba(37,99,235,.45);
+      outline-offset:3px;
+    }
+    h1{
+      text-align:center;
+      font-size:var(--fs-h1);
+      margin:12px 0 18px;
+      color:#111827;
+    }
+    #quizTitle{
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      margin:0;
+      font-size:var(--fs-h1);
+      line-height:1.2;
+      white-space:nowrap;
+    }
+
+    .quiz-container{
+      max-width:980px;
+      margin:0 auto;
+      display:grid;
+      gap:6px;
+    }
+    .question{
+      background:linear-gradient(135deg, #f8fbff 0%, #eef6ff 38%, #eaf1ff 100%);
+      border:1px solid rgba(147, 197, 253, 0.65);
+      border-radius:var(--radius);
+      padding:16px;
+      height:410px;
+      overflow:hidden;
+      box-shadow:0 6px 22px rgba(59, 130, 246, 0.12);
+    }
+    .question-meta{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin:0 0 10px;
+      position:relative;
+    }
+    .meta-box{
+      display:inline-flex;
+      align-items:center;
+      min-height:42px;
+      padding:8px 14px;
+      border-radius:10px;
+      background:rgba(255,255,255,0.18);
+      border:1px solid rgba(59, 130, 246, 0.25);
+      color:#1f2937;
+      font-weight:800;
+      font-size:1.05rem;
+      box-shadow:0 2px 10px rgba(59, 130, 246, 0.1);
+      text-align:left;
+      line-height:1.4;
+    }
+    #questionCounter{
+      justify-content:flex-start;
+      min-width:150px;
+    }
+    #questionTimer{
+      justify-content:flex-end;
+      min-width:120px;
+      margin-left:auto;
+    }
+    .q-title{
+      font-weight:800;
+      font-size:1.25rem;
+      line-height:1.7;
+      white-space:pre-line;
+      height:auto;
+      overflow:hidden;
+      margin:0 0 4px;
+      color:#0f172a;
+      text-shadow:none;
+    }
+    .q-title.compact{
+      font-size:1.1rem;
+      line-height:1.55;
+    }
+    .q-title.dense{
+      font-size:1rem;
+      line-height:1.45;
+    }
+    .options{
+      display:flex;
+      flex-direction:column;
+      gap:10px; /* vertical spacing line by line */
+    }
+
+    /* Each option as a separate box */
+    .options label.option{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:12px 14px;
+      border:2px solid rgba(96, 165, 250, 0.5);
+      border-radius:12px;
+      background:linear-gradient(135deg, #ffffff 0%, #edf6ff 100%);
+      cursor:pointer;
+      transition:all .15s ease;
+      font-size:var(--fs-label);
+      user-select:none;
+      color:#0f172a;
+    }
+    .options label.option:hover{
+      border-color:#60a5fa;
+      background:linear-gradient(135deg, #f8fbff 0%, #e0ecff 100%);
+    }
+    .option-text{
+      flex:1;
+      line-height:1.5;
+      color:#0f172a;
+      font-weight:700;
+      text-shadow:none;
+    }
+
+    /* Bigger radio for mobile */
+    .options input[type="radio"]{
+      appearance:none;
+      width:26px;
+      height:26px;
+      min-width:26px;
+      min-height:26px;
+      border:2px solid #9ca3af;
+      border-radius:50%;
+      display:inline-block;
+      position:relative;
+      outline:none;
+      transition:border-color .15s ease, box-shadow .15s ease;
+      background:#fff;
+    }
+    .options input[type="radio"]:checked{
+      border-color:#60a5fa;
+      box-shadow:0 0 0 3px rgba(96,165,250,0.12);
+    }
+    .options input[type="radio"]::after{
+      content:"";
+      position:absolute;
+      inset:5px;
+      border-radius:50%;
+      background:transparent;
+      transition:background .15s ease;
+    }
+    .options input[type="radio"]:checked::after{
+      background:#60a5fa;
+    }
+    .options input[type="radio"]:checked ~ .option-text,
+    .options label.option:has(input:checked) .option-text{
+      color:#0f172a;
+      text-shadow:none;
+    }
+    .options label.option:has(input:checked){
+      background:linear-gradient(135deg, #ffffff 0%, #edf6ff 100%);
+      border-color:#60a5fa;
+      box-shadow:none;
+    }
+
+    /* Correct/Incorrect colors */
+    .option.correct{
+      background:#dcfce7 !important;
+      border-color:var(--ok) !important;
+    }
+    .option.incorrect{
+      background:#fee2e2 !important;
+      border-color:var(--bad) !important;
+    }
+    .result-message{
+      margin-top:12px;
+      padding:10px 12px;
+      border-radius:10px;
+      background:rgba(255,255,255,0.8);
+      border:1px solid rgba(148, 163, 184, 0.4);
+      font-weight:800;
+      line-height:1.5;
+    }
+
+    /* Buttons row (submit + restart) */
+    .actions{
+      position:sticky;
+      bottom:0;
+      left:0; right:0;
+      background:rgba(247,247,251,.85);
+      backdrop-filter: blur(6px);
+      border-top:1px solid var(--border);
+      padding:12px 10px;
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      z-index:5;
+    }
+    .btn{
+      border:0;
+      border-radius:999px;
+      padding:12px 18px;
+      font-weight:700;
+      font-size:var(--fs-btn);
+      cursor:pointer;
+      box-shadow:0 4px 14px rgba(0,0,0,.08);
+      transition:transform .15s ease, box-shadow .15s ease;
+    }
+    .start-quiz-wrap{
+      display:flex;
+      justify-content:flex-start;
+      align-items:center;
+      margin:0;
+    }
+    .start-quiz-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:38px;
+      min-width:116px;
+      padding:8px 11px;
+      border-radius:10px;
+      background:linear-gradient(135deg, #2563eb, #7c3aed);
+      color:#fff;
+      font-size:.8rem;
+      font-weight:800;
+      line-height:1.2;
+      box-shadow:0 8px 18px rgba(37, 99, 235, 0.2);
+      margin-left:0;
+    }
+    .start-quiz-btn:disabled{
+      opacity:0.75;
+      cursor:not-allowed;
+    }
+    .btn:hover{
+      transform:translateY(-1px);
+      box-shadow:0 8px 18px rgba(0,0,0,.12);
+    }
+    .btn-submit{ background:#22c55e; color:#fff; }
+    .btn-final-submit{ background:#7c3aed; color:#fff; }
+    .btn-restart{ background:#ef4444; color:#fff; }
+    #prevBtn,
+    #nextBtn{
+      min-width:150px;
+      font-size:20px;
+      padding:14px 22px;
+      background:linear-gradient(135deg, #2563eb, #7c3aed);
+      color:#fff;
+      box-shadow:none;
+      border:0;
+      outline:none;
+    }
+
+    #prevBtn:hover,
+    #nextBtn:hover{
+      box-shadow:none;
+    }
+
+    /* Score modal */
+    .modal{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.4);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      z-index:50;
+    }
+    .modal .card{
+      background:#fff;
+      border-radius:18px;
+      padding:24px;
+      width:min(520px, 96vw);
+      text-align:center;
+      box-shadow:0 10px 30px rgba(0,0,0,.2);
+    }
+    .score{
+      font-size:28px;
+      font-weight:800;
+      margin:8px 0 2px;
+      color:#111827;
+    }
+    .note{
+      font-size:16px;
+      color:var(--muted);
+      margin-bottom:14px;
+    }
+    .modal .btn{
+      width:100%;
+    }
+    .sr-only{
+      position:absolute!important;
+      height:1px;width:1px;
+      overflow:hidden;clip:rect(1px,1px,1px,1px);
+      white-space:nowrap;border:0;padding:0;margin:-1px;
+    }
+
+    @media (max-width: 480px){
+      body{
+        padding:8px 10px 18px;
+      }
+      .site-header{
+        gap:10px;
+      }
+      .brand{
+        font-size:24px;
+        line-height:1.3;
+      }
+      .social-links{
+        gap:6px;
+      }
+      .social-link{
+        width:34px;
+        height:34px;
+      }
+      .social-link svg{
+        width:18px;
+        height:18px;
+      }
+      h1{
+        font-size:24px;
+        margin-bottom:12px;
+      }
+      .quiz-container{
+        gap:4px;
+      }
+      .question{
+        padding:12px;
+        height:360px;
+      }
+      .question-meta{
+        gap:8px;
+        align-items:center;
+        flex-wrap:wrap;
+      }
+      .meta-box{
+        min-height:36px;
+        padding:7px 10px;
+        font-size:0.9rem;
+      }
+      #questionCounter{
+        min-width:0;
+      }
+      #questionTimer{
+        min-width:90px;
+      }
+      .start-quiz-btn{
+        min-height:34px;
+        min-width:104px;
+        padding:7px 9px;
+        font-size:.76rem;
+      }
+      .q-title{
+        font-size:1.08rem;
+        line-height:1.6;
+        height:auto;
+        margin-bottom:4px;
+        word-break:break-word;
+      }
+      .q-title.dense{
+        font-size:.92rem;
+        line-height:1.4;
+      }
+      .options{
+        gap:8px;
+      }
+      .options label.option{
+        align-items:flex-start;
+        gap:10px;
+        padding:10px 12px;
+      }
+      .option-text{
+        font-size:0.95rem;
+        line-height:1.5;
+        word-break:break-word;
+      }
+      .actions{
+        padding:10px 8px 12px;
+        gap:8px;
+      }
+      .btn{
+        padding:11px 14px;
+        font-size:15px;
+      }
+      #prevBtn,
+      #nextBtn{
+        min-width:110px;
+        padding:12px 14px;
+        font-size:15px;
+      }
+      .modal .card{
+        padding:18px 16px;
+      }
+      .score{
+        font-size:24px;
+      }
+      .note{
+        font-size:14px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="site-header">
+    <div class="brand">My Academy</div>
+    <nav class="social-links" aria-label="Social links">
+      <a class="social-link youtube-link" href="http://www.youtube.com/@CurrentAffirs474" target="_blank" rel="noopener" aria-label="YouTube" title="YouTube">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6-6.3 3.6Z"/></svg>
+      </a>
+      <a class="social-link telegram-link" href="https://t.me/testexamdk" target="_blank" rel="noopener" aria-label="Telegram" title="Telegram">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 2 3 9.5l7.2 2.3L12.5 19l3.4-5.3L22 2Zm-3.2 3.5-6.8 5.2-5.3-1.7 12.1-3.5Z"/></svg>
+      </a>
+      <a class="social-link whatsapp-link" href="https://whatsapp.com/channel/0029Va5aFHK9MF8zXUIKM83k" target="_blank" rel="noopener" aria-label="WhatsApp" title="WhatsApp">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a9.9 9.9 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm0 18.1a8.1 8.1 0 0 1-4.1-1.1l-.3-.2-3.1.8.8-3-.2-.3A8.1 8.1 0 1 1 12 20.1Zm4.4-6.1c-.2-.1-1.3-.6-1.5-.7-.2-.1-.4-.1-.5.1l-.7.9c-.1.1-.3.2-.5.1a6.5 6.5 0 0 1-1.9-1.2 7.2 7.2 0 0 1-1.3-1.6c-.1-.2 0-.3.1-.4l.4-.5c.1-.1.1-.3.2-.4.1-.1 0-.3 0-.4l-.7-1.6c-.2-.4-.4-.4-.5-.4h-.4c-.2 0-.4.1-.6.3a2.4 2.4 0 0 0-.8 1.8c0 1 .7 2 0.8 2.1.1.1 1.4 2.2 3.5 3.1.5.2 1 .4 1.3.5.5.2 1 .1 1.4.1.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.1-1-.1-.1-.2-.1-.4-.2Z"/></svg>
+      </a>
+    </nav>
+  </div>
+  <button class="btn start-quiz-btn" id="startQuizBtn" type="button" style="display:none;">Start Quiz</button>
+
+  <div class="quiz-container" id="quiz" aria-live="polite"></div>
+
+  <div class="actions">
+    <button class="btn btn-submit" id="nextBtn">Next</button>
+    <button class="btn btn-submit" id="submitBtn" style="display:none;">Submit</button>
+    <button class="btn btn-restart" id="restartBtn" style="display:none;">Restart</button>
+  </div>
+
+  <!-- Score Modal -->
+  <div class="modal" id="scoreModal" role="dialog" aria-modal="true" aria-labelledby="scoreTitle" aria-describedby="scoreDesc">
+    <div class="card">
+      <div id="scoreTitle" class="score">आपका स्कोर</div>
+      <div id="scoreDesc" class="note">—</div>
+      <button class="btn btn-submit" id="showAnswersBtn">Restart Quiz</button>
+    </div>
+  </div>
+
+<script>
+/* =========================
+   Q&A DATA
+  Format: Question / Option 1 / Option 2 / Option 3 / Option 4 / Correct option number
+  Questions may be separated by a line break or a blank line. Line breaks inside a question are preserved.
+   Example: भारत की राजधानी क्या है? / मुंबई / दिल्ली / पटना / जयपुर / 2
+   ========================= */
+const quizDataText = `
+ताजमहल किस नदी के किनारे स्थित है? / यमुना / गंगा / नर्मदा / गोदावरी / 1
+लाल किला दिल्ली का निर्माण किसने कराया? / शाहजहाँ / अकबर / जहांगीर / औरंगजेब / 1
+दिल्ली के लाल किले का निर्माण किस वर्ष शुरू हुआ? / 1638 / 1605 / 1658 / 1526 / 1
+शाहजहाँ ने अपनी राजधानी कहाँ स्थानांतरित की? / शाहजहानाबाद / फतेहपुर सीकरी / दौलताबाद / अजमेर / 1
+जामा मस्जिद दिल्ली का निर्माण किसने कराया? / शाहजहाँ / अकबर / औरंगजेब / जहांगीर / 1
+मयूर सिंहासन किस मुगल शासक से संबंधित है? / शाहजहाँ / अकबर / बाबर / हुमायूँ / 1
+औरंगजेब का राज्यारोहण कब हुआ? / 1658 / 1605 / 1628 / 1707 / 1
+औरंगजेब की उपाधि क्या थी? / आलमगीर / विक्रमादित्य / शाह आलम / जहांदार / 1
+औरंगजेब ने जजिया कर पुनः कब लगाया? / 1679 / 1658 / 1707 / 1666 / 1
+औरंगजेब की मृत्यु कब हुई? / 1707 / 1680 / 1712 / 1658 / 1
+औरंगजेब की मृत्यु कहाँ हुई? / अहमदनगर / दिल्ली / आगरा / लाहौर / 1
+औरंगजेब के बाद मुगल साम्राज्य की शक्ति कैसी हुई? / कमजोर / अत्यधिक मजबूत / समाप्त तुरंत / कोई परिवर्तन नहीं / 1
+शिवाजी का जन्म कब हुआ? / 1630 / 1627 / 1640 / 1674 / 1
+शिवाजी के पिता कौन थे? / शाहजी भोंसले / बाजीराव / संभाजी / तानाजी / 1
+शिवाजी की माता कौन थीं? / जीजाबाई / ताराबाई / सईबाई / अहिल्याबाई / 1
+शिवाजी का राज्याभिषेक कब हुआ? / 1674 / 1666 / 1680 / 1658 / 1
+शिवाजी का राज्याभिषेक कहाँ हुआ? / रायगढ़ / पुणे / सतारा / आगरा / 1
+शिवाजी की प्रशासनिक परिषद को क्या कहा जाता था? / अष्टप्रधान / नवरत्न / दीवान-ए-खास / मंत्रिपरिषद / 1
+शिवाजी की गुरिल्ला युद्ध नीति को क्या कहा जाता है? / गणिमी कावा / चक्रव्यूह / दाग प्रणाली / मनसबदारी / 1
+शिवाजी की मृत्यु कब हुई? / 1680 / 1674 / 1707 / 1666 / 1
+शिवाजी के बाद कौन शासक बना? / संभाजी / राजाराम / शाहू / बाजीराव / 1
+मराठा साम्राज्य में पेशवा पद किससे संबंधित था? / प्रधानमंत्री / सेनापति मात्र / न्यायाधीश / राजदूत / 1
+प्रथम प्रसिद्ध पेशवा कौन था? / बालाजी विश्वनाथ / बाजीराव प्रथम / माधवराव / नाना साहब / 1
+बाजीराव प्रथम किसके लिए प्रसिद्ध था? / तेज सैन्य विस्तार / समुद्री खोज / अंग्रेजी शासन / स्थायी बंदोबस्त / 1
+बाजीराव प्रथम ने किस मुगल शक्ति को चुनौती दी? / मुगल साम्राज्य / चोल / गुप्त / मौर्य / 1
+तीसरा पानीपत का युद्ध कब हुआ? / 1761 / 1757 / 1764 / 1775 / 1
+तीसरे पानीपत के युद्ध में मराठों का सामना किससे हुआ? / अहमद शाह अब्दाली / बाबर / अंग्रेज / नादिरशाह / 1
+तीसरे पानीपत युद्ध में मराठों का नेतृत्व किसने किया? / सदाशिवराव भाऊ / बाजीराव प्रथम / शिवाजी / माधवराव / 1
+प्लासी का युद्ध कब हुआ? / 1757 / 1764 / 1857 / 1740 / 1
+प्लासी के युद्ध में अंग्रेजों का नेतृत्व किसने किया? / रॉबर्ट क्लाइव / वॉरेन हेस्टिंग्स / कॉर्नवालिस / डलहौजी / 1
+प्लासी के युद्ध में बंगाल का नवाब कौन था? / सिराजुद्दौला / मीर जाफर / मीर कासिम / अलीवर्दी खाँ / 1
+प्लासी के युद्ध के बाद बंगाल का नवाब कौन बना? / मीर जाफर / सिराजुद्दौला / मीर कासिम / शुजा-उद-दौला / 1
+बक्सर का युद्ध कब हुआ? / 1764 / 1757 / 1772 / 1857 / 1
+बक्सर के युद्ध में अंग्रेजों का नेतृत्व किसने किया? / हेक्टर मुनरो / रॉबर्ट क्लाइव / कॉर्नवालिस / वेलेजली / 1
+बक्सर के युद्ध के बाद अंग्रेजों को किस अधिकार की प्राप्ति हुई? / दीवानी अधिकार / निजामत / सैन्य भर्ती / समुद्री अधिकार / 1
+बंगाल की दीवानी अंग्रेजों को कब मिली? / 1765 / 1757 / 1764 / 1773 / 1
+द्वैध शासन बंगाल में किसने शुरू किया? / रॉबर्ट क्लाइव / वॉरेन हेस्टिंग्स / कॉर्नवालिस / डलहौजी / 1
+रेग्युलेटिंग एक्ट कब पारित हुआ? / 1773 / 1784 / 1793 / 1813 / 1
+बंगाल का पहला गवर्नर-जनरल कौन था? / वॉरेन हेस्टिंग्स / कॉर्नवालिस / वेलेजली / विलियम बेंटिंक / 1
+पिट्स इंडिया एक्ट कब पारित हुआ? / 1784 / 1773 / 1793 / 1813 / 1
+स्थायी बंदोबस्त किसने लागू किया? / लॉर्ड कॉर्नवालिस / वॉरेन हेस्टिंग्स / डलहौजी / वेलेजली / 1
+स्थायी बंदोबस्त कब लागू हुआ? / 1793 / 1773 / 1784 / 1813 / 1
+स्थायी बंदोबस्त मुख्यतः किस क्षेत्र में लागू हुआ? / बंगाल / पंजाब / मद्रास / बंबई / 1
+सहायक संधि की नीति किसने अपनाई? / लॉर्ड वेलेजली / डलहौजी / कॉर्नवालिस / हेस्टिंग्स / 1
+सहायक संधि का उद्देश्य क्या था? / भारतीय राज्यों पर अंग्रेजी नियंत्रण / व्यापार बंद करना / शिक्षा बढ़ाना / रेल बनाना / 1
+व्यपगत सिद्धांत किस गवर्नर-जनरल से संबंधित है? / लॉर्ड डलहौजी / वेलेजली / बेंटिंक / कॉर्नवालिस / 1
+व्यपगत सिद्धांत के तहत किस राज्य का विलय किया गया? / झाँसी / हैदराबाद / कश्मीर / मैसूर / 1
+भारत में पहली रेलगाड़ी कब चली? / 1853 / 1848 / 1861 / 1875 / 1
+पहली रेलगाड़ी कहाँ से कहाँ चली? / मुंबई से ठाणे / दिल्ली से आगरा / कोलकाता से पटना / चेन्नई से मैसूर / 1
+भारत में डाक व्यवस्था के विकास से किस गवर्नर-जनरल का नाम जुड़ा है? / डलहौजी / वेलेजली / हेस्टिंग्स / कर्जन / 1
+भारत में टेलीग्राफ सेवा के विकास का श्रेय किस काल को जाता है? / डलहौजी / अकबर / हर्ष / औरंगजेब / 1
+भारत में आधुनिक शिक्षा के विकास में किस दस्तावेज को महत्वपूर्ण माना जाता है? / मैकॉले मिनट / इलाहाबाद प्रशस्ति / आइने-अकबरी / अर्थशास्त्र / 1
+मैकॉले का शिक्षा संबंधी मिनट कब आया? / 1835 / 1813 / 1854 / 1882 / 1
+वुड्स डिस्पैच कब आया? / 1854 / 1835 / 1882 / 1904 / 1
+भारत में विश्वविद्यालयों की स्थापना कलकत्ता, बंबई और मद्रास में कब हुई? / 1857 / 1854 / 1882 / 1905 / 1
+सती प्रथा का उन्मूलन किसने किया? / विलियम बेंटिंक / डलहौजी / कर्जन / रिपन / 1
+सती प्रथा पर प्रतिबंध कब लगा? / 1829 / 1835 / 1856 / 1857 / 1
+सती प्रथा के विरुद्ध प्रमुख समाज सुधारक कौन थे? / राजा राममोहन राय / दयानंद सरस्वती / विवेकानंद / तिलक / 1
+ब्रह्म समाज की स्थापना किसने की? / राजा राममोहन राय / दयानंद सरस्वती / ईश्वरचंद्र विद्यासागर / ज्योतिबा फुले / 1
+ब्रह्म समाज की स्थापना कब हुई? / 1828 / 1875 / 1885 / 1897 / 1
+आर्य समाज की स्थापना किसने की? / स्वामी दयानंद सरस्वती / विवेकानंद / राममोहन राय / विद्यासागर / 1
+आर्य समाज की स्थापना कब हुई? / 1875 / 1828 / 1885 / 1897 / 1
+सत्यार्थ प्रकाश के लेखक कौन थे? / दयानंद सरस्वती / विवेकानंद / राममोहन राय / फुले / 1
+रामकृष्ण मिशन की स्थापना किसने की? / स्वामी विवेकानंद / रामकृष्ण परमहंस / दयानंद / तिलक / 1
+रामकृष्ण मिशन की स्थापना कब हुई? / 1897 / 1875 / 1885 / 1905 / 1
+सत्यशोधक समाज की स्थापना किसने की? / ज्योतिबा फुले / दयानंद / विवेकानंद / गोखले / 1
+सत्यशोधक समाज की स्थापना कब हुई? / 1873 / 1875 / 1885 / 1905 / 1
+विधवा पुनर्विवाह आंदोलन से किसका नाम जुड़ा है? / ईश्वरचंद्र विद्यासागर / तिलक / गोखले / सुभाष बोस / 1
+विधवा पुनर्विवाह अधिनियम कब पारित हुआ? / 1856 / 1829 / 1875 / 1885 / 1
+1857 का विद्रोह कहाँ से शुरू हुआ? / मेरठ / दिल्ली / कानपुर / झाँसी / 1
+1857 का विद्रोह कब शुरू हुआ? / 10 मई 1857 / 15 अगस्त 1857 / 26 जनवरी 1857 / 1 मई 1857 / 1
+1857 के विद्रोह का तत्काल कारण क्या था? / चर्बी वाले कारतूस / भारी कर / रेल / शिक्षा / 1
+मंगल पांडे किस स्थान से संबंधित थे? / बैरकपुर / मेरठ / कानपुर / झाँसी / 1
+1857 में दिल्ली में विद्रोहियों ने किसे सम्राट घोषित किया? / बहादुर शाह जफर / अकबर द्वितीय / नाना साहब / तात्या टोपे / 1
+कानपुर में 1857 के विद्रोह का नेतृत्व किसने किया? / नाना साहब / तात्या टोपे / कुंवर सिंह / बेगम हजरत महल / 1
+झाँसी में 1857 के विद्रोह का नेतृत्व किसने किया? / रानी लक्ष्मीबाई / बेगम हजरत महल / सरोजिनी नायडू / एनी बेसेंट / 1
+बिहार में 1857 के विद्रोह का प्रमुख नेता कौन था? / कुंवर सिंह / नाना साहब / तात्या टोपे / खान बहादुर खाँ / 1
+लखनऊ में 1857 के विद्रोह का नेतृत्व किसने किया? / बेगम हजरत महल / रानी लक्ष्मीबाई / नाना साहब / कुंवर सिंह / 1
+तात्या टोपे किससे संबंधित थे? / 1857 का विद्रोह / असहयोग आंदोलन / भारत छोड़ो आंदोलन / स्वदेशी आंदोलन / 1
+1857 के विद्रोह के बाद भारत का शासन किसके हाथ में चला गया? / ब्रिटिश क्राउन / ईस्ट इंडिया कंपनी / मुगल सम्राट / भारतीय राष्ट्रीय कांग्रेस / 1
+भारत शासन अधिनियम 1858 के बाद कंपनी का शासन समाप्त हुआ? / हाँ / नहीं / 1905 में / 1947 में / 1
+1857 के विद्रोह के बाद मुगल साम्राज्य का क्या हुआ? / समाप्त / मजबूत / पुनः स्थापित / कोई परिवर्तन नहीं / 1
+बहादुर शाह जफर को कहाँ निर्वासित किया गया? / रंगून / लंदन / काबुल / काहिरा / 1
+भारतीय राष्ट्रीय कांग्रेस की स्थापना कब हुई? / 1885 / 1875 / 1905 / 1919 / 1
+भारतीय राष्ट्रीय कांग्रेस के संस्थापक के रूप में किसका नाम जुड़ा है? / ए. ओ. ह्यूम / दादाभाई नौरोजी / तिलक / गांधी / 1
+कांग्रेस का पहला अधिवेशन कहाँ हुआ? / बंबई / कलकत्ता / मद्रास / दिल्ली / 1
+कांग्रेस के प्रथम अध्यक्ष कौन थे? / डब्ल्यू. सी. बनर्जी / दादाभाई नौरोजी / गोखले / तिलक / 1
+दादाभाई नौरोजी को किस नाम से जाना जाता है? / ग्रैंड ओल्ड मैन ऑफ इंडिया / पंजाब केसरी / लोकमान्य / देशबंधु / 1
+दादाभाई नौरोजी की प्रसिद्ध पुस्तक कौन-सी है? / Poverty and Un-British Rule in India / हिंद स्वराज / डिस्कवरी ऑफ इंडिया / इंडिया विन्स फ्रीडम / 1
+धन निकासी सिद्धांत किसने दिया? / दादाभाई नौरोजी / तिलक / गांधी / गोखले / 1
+भारतीय राष्ट्रीय कांग्रेस के नरमपंथी नेता कौन थे? / गोपाल कृष्ण गोखले / भगत सिंह / सुभाष बोस / तिलक / 1
+गोपाल कृष्ण गोखले ने किस संस्था की स्थापना की? / सर्वेंट्स ऑफ इंडिया सोसाइटी / आर्य समाज / ब्रह्म समाज / मुस्लिम लीग / 1
+सर्वेंट्स ऑफ इंडिया सोसाइटी की स्थापना कब हुई? / 1905 / 1885 / 1915 / 1920 / 1
+बाल गंगाधर तिलक की प्रसिद्ध घोषणा क्या थी? / स्वराज मेरा जन्मसिद्ध अधिकार है / करो या मरो / जय हिंद / इंकलाब जिंदाबाद / 1
+तिलक ने कौन-से उत्सवों को लोकप्रिय बनाया? / गणपति और शिवाजी उत्सव / होली और दीवाली / दुर्गा पूजा और ईद / बैसाखी और ओणम / 1
+केसरी समाचार पत्र किसने शुरू किया? / बाल गंगाधर तिलक / गांधी / गोखले / दादाभाई / 1
+बंगाल विभाजन कब हुआ? / 1905 / 1906 / 1911 / 1919 / 1
+बंगाल विभाजन किस वायसराय ने किया? / लॉर्ड कर्जन / लॉर्ड रिपन / लॉर्ड डलहौजी / लॉर्ड इरविन / 1
+बंगाल विभाजन के विरोध में कौन-सा आंदोलन शुरू हुआ? / स्वदेशी आंदोलन / असहयोग आंदोलन / भारत छोड़ो आंदोलन / खिलाफत आंदोलन / 1
+स्वदेशी आंदोलन का मुख्य उद्देश्य क्या था? / विदेशी वस्तुओं का बहिष्कार / कर बढ़ाना / अंग्रेजों की सहायता / सेना में भर्ती / 1
+
+
+
+
+
+`;
+
+const recordPattern = /([\s\S]*?)\s*\/\s*([^/]*?)\s*\/\s*([^/]*?)\s*\/\s*([^/]*?)\s*\/\s*([^/]*?)\s*\/\s*([1-4])(?=\s|$)/g;
+const quizData = [...quizDataText.trim().matchAll(recordPattern)].map((match, index) => {
+  const fields = match.slice(1).map((field) => field.trim());
+  if (fields.length !== 6) {
+    throw new Error(`Question ${index + 1} must have 6 fields separated by /`);
+  }
+  const correctOption = Number(fields[5]);
+  if (!Number.isInteger(correctOption) || correctOption < 1 || correctOption > 4) {
+    throw new Error(`Question ${index + 1} correct option must be a number from 1 to 4`);
+  }
+  return { q: fields[0], o: fields.slice(1, 5), a: correctOption - 1 };
+});
+
+function formatQuestion(question) {
+  return /[?؟]\s*$/.test(question) ? question : `${question}?`;
+}
+
+/* ================
+   Sequential quiz flow
+   ================ */
+const quizEl = document.getElementById("quiz");
+const startQuizBtn = document.getElementById("startQuizBtn");
+const nextBtn = document.getElementById("nextBtn");
+const submitBtn = document.getElementById("submitBtn");
+const restartBtn = document.getElementById("restartBtn");
+const scoreModal = document.getElementById("scoreModal");
+const scoreTitle = document.getElementById("scoreTitle");
+const scoreDesc = document.getElementById("scoreDesc");
+const showAnswersBtn = document.getElementById("showAnswersBtn");
+let currentQuestionIndex = 0;
+let reviewMode = false;
+let questionTimerId = null;
+const totalTimeSeconds = 3600;
+let timeLeft = totalTimeSeconds;
+let timerStarted = false;
+const userAnswers = new Array(quizData.length).fill(null);
+
+function formatTime(totalSeconds) {
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  return [hours, minutes, seconds].map((value) => String(value).padStart(2, "0")).join(":");
+}
+
+function clearQuestionTimer() {
+  if (questionTimerId) {
+    clearInterval(questionTimerId);
+    questionTimerId = null;
+  }
+}
+
+function startQuestionTimer() {
+  clearQuestionTimer();
+  if (reviewMode) return;
+
+  timerStarted = true;
+  const timerBox = document.getElementById("questionTimer");
+  if (timerBox) {
+    timerBox.textContent = `Time: ${formatTime(timeLeft)}`;
+  }
+
+  questionTimerId = setInterval(() => {
+    timeLeft -= 1;
+    if (timerBox) {
+      timerBox.textContent = `Time: ${formatTime(timeLeft)}`;
+    }
+
+    if (timeLeft <= 0) {
+      clearQuestionTimer();
+      submitQuiz();
+    }
+  }, 1000);
+}
+
+function updateControls() {
+  const isLast = currentQuestionIndex === quizData.length - 1;
+
+  nextBtn.style.display = reviewMode ? (isLast ? "none" : "inline-block") : "inline-block";
+  submitBtn.style.display = "none";
+  restartBtn.style.display = reviewMode ? "inline-block" : "none";
+
+  nextBtn.textContent = isLast && !reviewMode ? "Submit" : "Next";
+}
+
+function showStartScreen() {
+  clearQuestionTimer();
+  timerStarted = false;
+  timeLeft = totalTimeSeconds;
+  reviewMode = false;
+  currentQuestionIndex = 0;
+  quizEl.innerHTML = "";
+  startQuizBtn.style.display = "inline-flex";
+}
+
+function startQuiz() {
+  timeLeft = totalTimeSeconds;
+  timerStarted = true;
+  reviewMode = false;
+  currentQuestionIndex = 0;
+  startQuizBtn.style.display = "none";
+  renderQuestion();
+}
+
+function renderQuestion() {
+  clearQuestionTimer();
+  quizEl.innerHTML = "";
+
+  const currentQuestion = quizData[currentQuestionIndex];
+  const selectedAnswer = userAnswers[currentQuestionIndex];
+  const questionAnswered = selectedAnswer !== null;
+
+  const metaRow = document.createElement("div");
+  metaRow.className = "question-meta";
+
+  const startWrap = document.createElement("div");
+  startWrap.className = "start-quiz-wrap";
+  startWrap.appendChild(startQuizBtn);
+
+  const quizTitle = document.createElement("h1");
+  quizTitle.id = "quizTitle";
+  quizTitle.textContent = "100 Gk";
+
+  const counter = document.createElement("div");
+  counter.id = "questionCounter";
+  counter.className = "meta-box";
+  counter.textContent = `Question ${currentQuestionIndex + 1}/${quizData.length}`;
+
+  const timer = document.createElement("div");
+  timer.id = "questionTimer";
+  timer.className = "meta-box";
+  timer.textContent = `Time: ${formatTime(timerStarted ? timeLeft : totalTimeSeconds)}`;
+
+  metaRow.appendChild(counter);
+  metaRow.appendChild(startWrap);
+  metaRow.appendChild(quizTitle);
+  metaRow.appendChild(timer);
+  startQuizBtn.style.display = timerStarted || reviewMode ? "none" : "inline-flex";
+  quizEl.appendChild(metaRow);
+
+  const card = document.createElement("div");
+  card.className = "question";
+
+  const title = document.createElement("p");
+  title.className = "q-title";
+  title.textContent = `${String(currentQuestionIndex + 1).padStart(2, "0")}. ${formatQuestion(currentQuestion.q)}`;
+
+  const opts = document.createElement("div");
+  opts.className = "options";
+
+  currentQuestion.o.forEach((opt, optionIndex) => {
+    const id = `q${currentQuestionIndex}-o${optionIndex}`;
+    const label = document.createElement("label");
+    label.className = "option";
+    label.setAttribute("for", id);
+
+    const input = document.createElement("input");
+    input.type = "radio";
+    input.id = id;
+    input.name = `q${currentQuestionIndex}`;
+    input.value = optionIndex;
+    input.checked = selectedAnswer === optionIndex;
+
+    if (reviewMode || questionAnswered) {
+      input.disabled = true;
+      if (optionIndex === currentQuestion.a) {
+        label.classList.add("correct");
+      }
+      if (selectedAnswer === optionIndex && selectedAnswer !== currentQuestion.a) {
+        label.classList.add("incorrect");
+      }
+    } else {
+      input.addEventListener("change", () => {
+        userAnswers[currentQuestionIndex] = Number(input.value);
+        if (!timerStarted) {
+          timeLeft = totalTimeSeconds;
+          timerStarted = true;
+          startQuestionTimer();
+        }
+        renderQuestion();
+      });
+    }
+
+    const span = document.createElement("span");
+    span.className = "option-text";
+    span.textContent = opt;
+
+    label.appendChild(input);
+    label.appendChild(span);
+    opts.appendChild(label);
+  });
+
+  card.appendChild(title);
+  card.appendChild(opts);
+
+  if (reviewMode || questionAnswered) {
+    const result = document.createElement("div");
+    result.className = "result-message";
+    result.style.display = "none";
+    card.appendChild(result);
+  }
+
+  quizEl.appendChild(card);
+
+  title.style.height = "auto";
+  const lineHeight = parseFloat(getComputedStyle(title).lineHeight);
+  if (title.scrollHeight > lineHeight * 3 + 1) {
+    title.classList.add("dense");
+  }
+  title.style.height = "";
+
+  updateControls();
+
+  if (!reviewMode && timerStarted) {
+    startQuestionTimer();
+  }
+}
+
+function showAnswers() {
+  clearQuestionTimer();
+  timerStarted = false;
+  reviewMode = true;
+  currentQuestionIndex = 0;
+  renderQuestion();
+  scoreModal.style.display = "none";
+}
+
+function submitQuiz() {
+  clearQuestionTimer();
+  timerStarted = false;
+
+  let score = 0;
+  let attempted = 0;
+  quizData.forEach((item, qi) => {
+    if (userAnswers[qi] !== null) {
+      attempted++;
+      if (Number(userAnswers[qi]) === item.a) score++;
+    }
+  });
+
+  scoreTitle.textContent = `आपका स्कोर: ${score}/${quizData.length}`;
+  const incorrect = attempted - score;
+  const notAttempted = quizData.length - attempted;
+  scoreDesc.textContent = `सही उत्तर: ${score} • गलत उत्तर: ${incorrect} • Not Attempted: ${notAttempted}`;
+  scoreModal.style.display = "flex";
+}
+
+nextBtn.addEventListener("click", () => {
+  if (reviewMode) {
+    if (currentQuestionIndex < quizData.length - 1) {
+      currentQuestionIndex += 1;
+      renderQuestion();
+    }
+  } else {
+    if (!timerStarted) {
+      timeLeft = totalTimeSeconds;
+      timerStarted = true;
+    }
+
+    if (currentQuestionIndex < quizData.length - 1) {
+      currentQuestionIndex += 1;
+      renderQuestion();
+    } else {
+      submitQuiz();
+    }
+  }
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+submitBtn.addEventListener("click", submitQuiz);
+
+startQuizBtn.addEventListener("click", startQuiz);
+showAnswersBtn.addEventListener("click", restartQuiz);
+
+function restartQuiz() {
+  clearQuestionTimer();
+  timerStarted = false;
+  timeLeft = totalTimeSeconds;
+  reviewMode = false;
+  currentQuestionIndex = 0;
+  userAnswers.fill(null);
+  scoreModal.style.display = "none";
+  renderQuestion();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+restartBtn.addEventListener("click", restartQuiz);
+
+scoreModal.addEventListener("click", (e) => {
+  if (e.target === scoreModal) scoreModal.style.display = "none";
+});
+
+renderQuestion();
+
+</script>
+</body>
+</html>

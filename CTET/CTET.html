@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CTET परीक्षा तैयारी पोर्टल</title>
+    <style>
+        /* Google Fonts से आधुनिक फ़ॉन्ट इम्पोर्ट करना */
+        @import url('https://googleapis.com');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* मुख्य कार्ड कंटेनर */
+        .container {
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            padding: 40px 30px;
+            width: 100%;
+            max-width: 550px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+        }
+
+        /* आकर्षक हेडिंग */
+        .main-heading {
+            font-size: 2.5rem;
+            color: #1e3c72;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            position: relative;
+            display: inline-block;
+        }
+
+        .main-heading::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: #ff416c;
+            margin: 8px auto 0 auto;
+            border-radius: 2px;
+        }
+
+        .sub-heading {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 35px;
+            font-weight: 400;
+        }
+
+        /* बटन ग्रुप और स्टाइल */
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* लिंक को बटन जैसा लुक देने के लिए स्टाइल */
+        .ctet-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px 25px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-decoration: none; /* लिंक के नीचे की लाइन हटाने के लिए */
+        }
+
+        /* बटन 1: प्राथमिक स्तर (1 से 5) */
+        .btn-primary-level {
+            background: linear-gradient(45deg, #1e3c72, #2a5298);
+        }
+
+        .btn-primary-level:hover {
+            background: linear-gradient(45deg, #2a5298, #1e3c72);
+            box-shadow: 0 8px 25px rgba(30, 60, 114, 0.35);
+            transform: scale(1.02);
+        }
+
+        /* बटन 2: उच्च प्राथमिक स्तर (6 से 8) */
+        .btn-elementary-level {
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+        }
+
+        .btn-elementary-level:hover {
+            background: linear-gradient(45deg, #ff4b2b, #ff416c);
+            box-shadow: 0 8px 25px rgba(255, 65, 108, 0.35);
+            transform: scale(1.02);
+        }
+
+        /* बटन एक्टिव इफ़ेक्ट */
+        .ctet-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* बटन के नीचे का छोटा टेक्स्ट */
+        .btn-subtext {
+            font-size: 0.85rem;
+            font-weight: 400;
+            display: block;
+            opacity: 0.9;
+            margin-top: 2px;
+        }
+
+        /* फुटर सूचना */
+        .footer-note {
+            margin-top: 30px;
+            font-size: 0.85rem;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- हेडिंग सेक्शन -->
+        <h1 class="main-heading">CTET 2026</h1>
+        <p class="sub-heading">केंद्रीय शिक्षक पात्रता परीक्षा तैयारी पोर्टल</p>
+
+        <!-- बटन (लिंक) सेक्शन -->
+        <div class="button-group">
+            
+            <!-- लिंक 1: सीटेट 1 से 5 -->
+            <!-- यहाँ href="#" की जगह अपना लिंक डालें, जैसे: href="https://yourwebsite.com" -->
+            <a href="CTET1-5/1to5.html" class="ctet-btn btn-primary-level">
+                <div>
+                    सीटेट: कक्षा 1 से 5
+                    <span class="btn-subtext">(Paper - I Primary Stage)</span>
+                </div>
+            </a>
+
+            <!-- लिंक 2: सीटेट 6 से 8 -->
+            <!-- यहाँ href="#" की जगह अपना लिंक डालें, जैसे: href="https://yourwebsite.com" -->
+            <a href="CTET 6-8/CTET_1_5_My_Academy (1).html" class="ctet-btn btn-elementary-level">
+                <div>
+                    सीटेट: कक्षा 6 से 8
+                    <span class="btn-subtext">(Paper - II Elementary Stage)</span>
+                </div>
+            </a>
+
+        </div>
+
+        <div class="footer-note">
+            अपनी कक्षा का चयन करके अभ्यास टेस्ट शुरू करें।
+        </div>
+    </div>
+
+</body>
+</html>

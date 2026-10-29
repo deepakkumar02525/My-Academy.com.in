@@ -1,0 +1,971 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+  <title>करेंट अफेयर्स</title>
+  <style>
+    :root{
+      --bg:#dfe9fb;
+      --card:#ffffff;
+      --text:#222;
+      --muted:#6b7280;
+      --accent:#2563eb;
+      --ok:#16a34a;
+      --bad:#dc2626;
+      --border:#e5e7eb;
+      --radius:14px;
+      --space:14px;
+
+      /* Base font sizes (mobile-first) */
+      --fs-body:18px;
+      --fs-label:18px;
+      --fs-h1:26px;
+      --fs-brand:30px; /* ~2pt (≈2.66px) बड़ा than h1 */
+      --fs-btn:18px;
+    }
+    @media (min-width:480px){
+      :root{
+        --fs-body:18px;
+        --fs-label:19px;
+        --fs-h1:28px;
+        --fs-brand:32px;
+        --fs-btn:18px;
+      }
+    }
+    @media (min-width:768px){
+      :root{
+        --fs-body:18px;
+        --fs-label:20px;
+        --fs-h1:30px;
+        --fs-brand:34px;
+        --fs-btn:18px;
+      }
+    }
+
+    *{box-sizing:border-box}
+    html {
+      height: 100%;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    html::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+      display: none;
+    }
+    body{
+      margin:0;
+      padding:8px 14px 24px;
+      min-height:100vh;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,Helvetica,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.5;
+      font-size:var(--fs-body);
+      box-sizing:border-box;
+      overflow-x:hidden;
+      overflow-y:auto;
+      scrollbar-width:none;
+      -ms-overflow-style:none;
+      -webkit-text-size-adjust:100%;
+      text-rendering:optimizeLegibility;
+    }
+    body::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+      display: none;
+    }
+    .site-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      max-width:980px;
+      margin:0 auto;
+      position:relative;
+    }
+    .brand{
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      font-weight:800;
+      color:#ef4444; /* red */
+      font-size:var(--fs-brand);
+      letter-spacing:.2px;
+    }
+    .social-links{
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      gap:8px;
+      margin-left:auto;
+    }
+    .social-link{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:38px;
+      height:38px;
+      border-radius:50%;
+      color:#fff;
+      text-decoration:none;
+      transition:transform .15s ease, box-shadow .15s ease;
+    }
+    .social-link:hover{
+      transform:translateY(-1px);
+      box-shadow:0 5px 12px rgba(15,23,42,.2);
+    }
+    .social-link svg{
+      width:21px;
+      height:21px;
+      fill:currentColor;
+    }
+    .youtube-link{ background:#ef4444; }
+    .telegram-link{ background:#0ea5e9; }
+    .whatsapp-link{ background:#22c55e; }
+    .social-link:focus-visible{
+      outline:3px solid rgba(37,99,235,.45);
+      outline-offset:3px;
+    }
+    h1{
+      text-align:center;
+      font-size:var(--fs-h1);
+      margin:12px 0 18px;
+      color:#111827;
+    }
+    #quizTitle{
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      margin:0;
+      font-size:var(--fs-h1);
+      line-height:1.2;
+      white-space:nowrap;
+    }
+
+    .quiz-container{
+      max-width:980px;
+      margin:0 auto;
+      display:grid;
+      gap:6px;
+    }
+    .question{
+      background:linear-gradient(135deg, #f8fbff 0%, #eef6ff 38%, #eaf1ff 100%);
+      border:1px solid rgba(147, 197, 253, 0.65);
+      border-radius:var(--radius);
+      padding:16px;
+      height:410px;
+      overflow:hidden;
+      box-shadow:0 6px 22px rgba(59, 130, 246, 0.12);
+    }
+    .question-meta{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin:0 0 10px;
+      position:relative;
+    }
+    .meta-box{
+      display:inline-flex;
+      align-items:center;
+      min-height:42px;
+      padding:8px 14px;
+      border-radius:10px;
+      background:rgba(255,255,255,0.18);
+      border:1px solid rgba(59, 130, 246, 0.25);
+      color:#1f2937;
+      font-weight:800;
+      font-size:1.05rem;
+      box-shadow:0 2px 10px rgba(59, 130, 246, 0.1);
+      text-align:left;
+      line-height:1.4;
+    }
+    #questionCounter{
+      justify-content:flex-start;
+      min-width:150px;
+    }
+    #questionTimer{
+      justify-content:flex-end;
+      min-width:120px;
+      margin-left:auto;
+    }
+    .q-title{
+      font-weight:800;
+      font-size:1.2rem;
+      line-height:1.7;
+      white-space:pre-line;
+      height:auto;
+      overflow:hidden;
+      margin:0 0 4px;
+      color:#0f172a;
+      text-shadow:none;
+    }
+    .q-title.compact{
+      font-size:1.05rem;
+      line-height:1.55;
+    }
+    .q-title.dense{
+      font-size:.95rem;
+      line-height:1.45;
+    }
+    .options{
+      display:flex;
+      flex-direction:column;
+      gap:10px; /* vertical spacing line by line */
+    }
+
+    /* Each option as a separate box */
+    .options label.option{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:12px 14px;
+      border:2px solid rgba(96, 165, 250, 0.5);
+      border-radius:12px;
+      background:linear-gradient(135deg, #ffffff 0%, #edf6ff 100%);
+      cursor:pointer;
+      transition:all .15s ease;
+      font-size:var(--fs-label);
+      user-select:none;
+      color:#0f172a;
+    }
+    .options label.option:hover{
+      border-color:#60a5fa;
+      background:linear-gradient(135deg, #f8fbff 0%, #e0ecff 100%);
+    }
+    .option-text{
+      flex:1;
+      line-height:1.5;
+      color:#0f172a;
+      font-weight:700;
+      text-shadow:none;
+    }
+
+    /* Bigger radio for mobile */
+    .options input[type="radio"]{
+      appearance:none;
+      width:26px;
+      height:26px;
+      min-width:26px;
+      min-height:26px;
+      border:2px solid #9ca3af;
+      border-radius:50%;
+      display:inline-block;
+      position:relative;
+      outline:none;
+      transition:border-color .15s ease, box-shadow .15s ease;
+      background:#fff;
+    }
+    .options input[type="radio"]:checked{
+      border-color:#60a5fa;
+      box-shadow:0 0 0 3px rgba(96,165,250,0.12);
+    }
+    .options input[type="radio"]::after{
+      content:"";
+      position:absolute;
+      inset:5px;
+      border-radius:50%;
+      background:transparent;
+      transition:background .15s ease;
+    }
+    .options input[type="radio"]:checked::after{
+      background:#60a5fa;
+    }
+    .options input[type="radio"]:checked ~ .option-text,
+    .options label.option:has(input:checked) .option-text{
+      color:#0f172a;
+      text-shadow:none;
+    }
+    .options label.option:has(input:checked){
+      background:linear-gradient(135deg, #ffffff 0%, #edf6ff 100%);
+      border-color:#60a5fa;
+      box-shadow:none;
+    }
+
+    /* Correct/Incorrect colors */
+    .option.correct{
+      background:#dcfce7 !important;
+      border-color:var(--ok) !important;
+    }
+    .option.incorrect{
+      background:#fee2e2 !important;
+      border-color:var(--bad) !important;
+    }
+    .result-message{
+      margin-top:12px;
+      padding:10px 12px;
+      border-radius:10px;
+      background:rgba(255,255,255,0.8);
+      border:1px solid rgba(148, 163, 184, 0.4);
+      font-weight:800;
+      line-height:1.5;
+    }
+
+    /* Buttons row (submit + restart) */
+    .actions{
+      position:sticky;
+      bottom:0;
+      left:0; right:0;
+      background:rgba(247,247,251,.85);
+      backdrop-filter: blur(6px);
+      border-top:1px solid var(--border);
+      padding:12px 10px;
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      z-index:5;
+    }
+    .btn{
+      border:0;
+      border-radius:999px;
+      padding:12px 18px;
+      font-weight:700;
+      font-size:var(--fs-btn);
+      cursor:pointer;
+      box-shadow:0 4px 14px rgba(0,0,0,.08);
+      transition:transform .15s ease, box-shadow .15s ease;
+    }
+    .start-quiz-wrap{
+      display:flex;
+      justify-content:flex-start;
+      align-items:center;
+      margin:0;
+    }
+    .start-quiz-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:38px;
+      min-width:116px;
+      padding:8px 11px;
+      border-radius:10px;
+      background:linear-gradient(135deg, #2563eb, #7c3aed);
+      color:#fff;
+      font-size:.8rem;
+      font-weight:800;
+      line-height:1.2;
+      box-shadow:0 8px 18px rgba(37, 99, 235, 0.2);
+      margin-left:0;
+    }
+    .start-quiz-btn:disabled{
+      opacity:0.75;
+      cursor:not-allowed;
+    }
+    .btn:hover{
+      transform:translateY(-1px);
+      box-shadow:0 8px 18px rgba(0,0,0,.12);
+    }
+    .btn-submit{ background:#22c55e; color:#fff; }
+    .btn-final-submit{ background:#7c3aed; color:#fff; }
+    .btn-restart{ background:#ef4444; color:#fff; }
+    #prevBtn,
+    #nextBtn{
+      min-width:150px;
+      font-size:20px;
+      padding:14px 22px;
+      background:linear-gradient(135deg, #2563eb, #7c3aed);
+      color:#fff;
+      box-shadow:none;
+      border:0;
+      outline:none;
+    }
+
+    #prevBtn:hover,
+    #nextBtn:hover{
+      box-shadow:none;
+    }
+
+    /* Score modal */
+    .modal{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.4);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      z-index:50;
+    }
+    .modal .card{
+      background:#fff;
+      border-radius:18px;
+      padding:24px;
+      width:min(520px, 96vw);
+      text-align:center;
+      box-shadow:0 10px 30px rgba(0,0,0,.2);
+    }
+    .score{
+      font-size:28px;
+      font-weight:800;
+      margin:8px 0 2px;
+      color:#111827;
+    }
+    .note{
+      font-size:16px;
+      color:var(--muted);
+      margin-bottom:14px;
+    }
+    .modal .btn{
+      width:100%;
+    }
+    .sr-only{
+      position:absolute!important;
+      height:1px;width:1px;
+      overflow:hidden;clip:rect(1px,1px,1px,1px);
+      white-space:nowrap;border:0;padding:0;margin:-1px;
+    }
+
+    @media (max-width: 480px){
+      body{
+        padding:8px 10px 18px;
+      }
+      .site-header{
+        gap:10px;
+      }
+      .brand{
+        font-size:24px;
+        line-height:1.3;
+      }
+      .social-links{
+        gap:6px;
+      }
+      .social-link{
+        width:34px;
+        height:34px;
+      }
+      .social-link svg{
+        width:18px;
+        height:18px;
+      }
+      h1{
+        font-size:24px;
+        margin-bottom:12px;
+      }
+      .quiz-container{
+        gap:4px;
+      }
+      .question{
+        padding:12px;
+        height:360px;
+      }
+      .question-meta{
+        gap:8px;
+        align-items:center;
+        flex-wrap:wrap;
+      }
+      .meta-box{
+        min-height:36px;
+        padding:7px 10px;
+        font-size:0.9rem;
+      }
+      #questionCounter{
+        min-width:0;
+      }
+      #questionTimer{
+        min-width:90px;
+      }
+      .start-quiz-btn{
+        min-height:34px;
+        min-width:104px;
+        padding:7px 9px;
+        font-size:.76rem;
+      }
+      .q-title{
+        font-size:1rem;
+        line-height:1.6;
+        height:auto;
+        margin-bottom:4px;
+        word-break:break-word;
+      }
+      .q-title.dense{
+        font-size:.86rem;
+        line-height:1.4;
+      }
+      .options{
+        gap:8px;
+      }
+      .options label.option{
+        align-items:flex-start;
+        gap:10px;
+        padding:10px 12px;
+      }
+      .option-text{
+        font-size:0.95rem;
+        line-height:1.5;
+        word-break:break-word;
+      }
+      .actions{
+        padding:10px 8px 12px;
+        gap:8px;
+      }
+      .btn{
+        padding:11px 14px;
+        font-size:15px;
+      }
+      #prevBtn,
+      #nextBtn{
+        min-width:110px;
+        padding:12px 14px;
+        font-size:15px;
+      }
+      .modal .card{
+        padding:18px 16px;
+      }
+      .score{
+        font-size:24px;
+      }
+      .note{
+        font-size:14px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="site-header">
+    <div class="brand">My Academy</div>
+    <nav class="social-links" aria-label="Social links">
+      <a class="social-link youtube-link" href="http://www.youtube.com/@CurrentAffirs474" target="_blank" rel="noopener" aria-label="YouTube" title="YouTube">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6-6.3 3.6Z"/></svg>
+      </a>
+      <a class="social-link telegram-link" href="https://t.me/testexamdk" target="_blank" rel="noopener" aria-label="Telegram" title="Telegram">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 2 3 9.5l7.2 2.3L12.5 19l3.4-5.3L22 2Zm-3.2 3.5-6.8 5.2-5.3-1.7 12.1-3.5Z"/></svg>
+      </a>
+      <a class="social-link whatsapp-link" href="https://whatsapp.com/channel/0029Va5aFHK9MF8zXUIKM83k" target="_blank" rel="noopener" aria-label="WhatsApp" title="WhatsApp">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a9.9 9.9 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm0 18.1a8.1 8.1 0 0 1-4.1-1.1l-.3-.2-3.1.8.8-3-.2-.3A8.1 8.1 0 1 1 12 20.1Zm4.4-6.1c-.2-.1-1.3-.6-1.5-.7-.2-.1-.4-.1-.5.1l-.7.9c-.1.1-.3.2-.5.1a6.5 6.5 0 0 1-1.9-1.2 7.2 7.2 0 0 1-1.3-1.6c-.1-.2 0-.3.1-.4l.4-.5c.1-.1.1-.3.2-.4.1-.1 0-.3 0-.4l-.7-1.6c-.2-.4-.4-.4-.5-.4h-.4c-.2 0-.4.1-.6.3a2.4 2.4 0 0 0-.8 1.8c0 1 .7 2 0.8 2.1.1.1 1.4 2.2 3.5 3.1.5.2 1 .4 1.3.5.5.2 1 .1 1.4.1.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.1-1-.1-.1-.2-.1-.4-.2Z"/></svg>
+      </a>
+    </nav>
+  </div>
+  <button class="btn start-quiz-btn" id="startQuizBtn" type="button" style="display:none;">Start Quiz</button>
+
+  <div class="quiz-container" id="quiz" aria-live="polite"></div>
+
+  <div class="actions">
+    <button class="btn btn-submit" id="nextBtn">Next</button>
+    <button class="btn btn-submit" id="submitBtn" style="display:none;">Submit</button>
+    <button class="btn btn-restart" id="restartBtn" style="display:none;">Restart</button>
+  </div>
+
+  <!-- Score Modal -->
+  <div class="modal" id="scoreModal" role="dialog" aria-modal="true" aria-labelledby="scoreTitle" aria-describedby="scoreDesc">
+    <div class="card">
+      <div id="scoreTitle" class="score">आपका स्कोर</div>
+      <div id="scoreDesc" class="note">—</div>
+      <button class="btn btn-submit" id="showAnswersBtn">Restart Quiz</button>
+    </div>
+  </div>
+
+<script>
+/* =========================
+   Q&A DATA
+  Format: Question / Option 1 / Option 2 / Option 3 / Option 4 / Correct option number
+  Questions may be separated by a line break or a blank line. Line breaks inside a question are preserved.
+   Example: भारत की राजधानी क्या है? / मुंबई / दिल्ली / पटना / जयपुर / 2
+   ========================= */
+const quizDataText = `
+2011 की जनगणना के अनुसार, भारत के निम्‍नलिखित में से किस राज्‍य की जनसंख्‍या सबसे कम है / बिहार / असम / सिक्किम / मेघालय / 3 
+2011 की जनगणना के अनुसार, निम्‍नलिखित में से किस राज्‍य की जनसंख्‍या वृद्धि दर सर्वाधिक है / पिश्‍चम बंगाल / उत्तर प्रदेश / महाराष्‍ट्र / उत्तराखंड / 2
+42वें संविधान संशोधन अधिनियम निम्‍नलिखित में से किस समिति की रिपोर्ट के आधार पर तैयार किया गया था / स्‍वर्ण सिंह समिति / सरकारिया समिति / हुकुम सिंह समिति / एल.एम.सिंघवी समिति / 1
+दल बदल निरोधक कानून किस संविधान संशोधन विधेयक से संबंधित है / 51वां / 52वां / 55वां / 58वां / 2 
+भारत और चीन द्वारा पंचशील की घोषणा किस वर्ष की गई थी / 1952 / 1953 / 1954 / 1955 / 3 
+कौन-सी ग्रंथि रक्‍त में कैल्शियम स्‍तर को कम कर देती है / पाराथाइराइड / हाइपोथैलसम / अधिवृक्‍क / थाइराइड / 4 
+भारत का राष्‍ट्रगान 'जन गण मन' के रचयिता हैं / सरोजिनी नायडू / बंकिमचन्‍द्र चट्टोपाध्‍याय / शरतचन्‍द्र चट्टोपाध्‍याय / रबीन्‍द्र नाथ टैगोर / 4
+बंगाल में समाजिक-धार्मिक सुधारों में अग्रणी 'आत्‍मीय सभा' की शुरूआत किसने की थी / विवेकानंद / दयानंद सरस्‍वती / राजा राममोहन राय / अरबिंदो / 3 
+किस संविधान संशोधन अधिनियम द्वारा स्‍वतंत्रता के मोलिक अधिकारों की संख्‍या 7 से घटाकर 6 कर दिया गया / 42वें संविधान संशोधन / 44वें संविधान संशोधन / 46वें संविधान संशोधन / 48वें संविधान संशोधन / 2 
+बिहार का 114वां स्‍थापना दिवस 22 मार्च को मनाया गया। बिहार किस क्षेत्र से अलग होकर एक स्‍वतंत्र राज्‍य बना था / असम / बंगाल / उत्तर प्रदेश / ओडिशा / 2 
+निम्‍नलिखित में से कौन भारत की विदेश नीति के संचालन का मार्गदर्शन करता है / एक्‍ट ईस्‍ट पॉलिसी / पंचशील / एशियन / लुक वेस्‍ट पॉलिसी / 2 
+निम्‍नलिखिता नेताओं में से कौन 'गुटनिरपेक्ष आंदोलन' के संस्‍थापक नहीं थे / स्‍टालिन / नासेर / टीटो / नेहरू / 1 
+कौन सी ग्रंथि आपात ग्रंथि भी कहलाती है / अग्‍न्याशय / अधिवृक्‍क / थायराइड / पिटूइटेरी / 2 
+खांसी और छींक जैसी अनैच्छिक गतिविधियों को नियंत्रित करता है / मेड्यूला / मस्तिष्‍क / पोन्‍स / अनुमस्तिष्‍क / 1 
+किस वर्ष में कांग्रेस और मुस्लिम लीग ने ऐतिहासिक लखनऊ समझौते पर हस्‍ताक्षर किये थे / 1914 / 1915 / 1916 / 1917 / 3 
+रौलेक्‍ट एक्‍ट की प्रतिक्रिया के रूप में किस तिथि को राष्‍ट्रीय अपमान दिवस के रूप में आयोजित किया गया था / 14 जून 1921 / 02 फरवरी 1913 / 6 अप्रैल 1919 / 08 मई 1920 / 3 
+2011 की जनगणना के अनुसार, भारत में तीसरी सर्वाधिक बोली जाने वाली भाषा कौन सी है / तेलुगू / तमिल / बंगाली / मराठी / 4 
+2011 की जनगणना के अनुसार भारत में साक्षरता दर लगभग कितनी है / 74.04 प्रतिशत / 72.02 प्रतिशत / 82.04 प्रतिशत / 82.02 प्रतिशत / 1 
+संविधान के किस संशोधन द्वारा सम्‍पत्ति के अधिकार को मूल अधिकार की श्रेणी से निकाल दिया गया है / 24वें संविधान संशोधन / 44वें संविधान संशोधन / 42वें संविधान संशोधन / 66वें संविधान संशोधन / 2 
+52वां संविधान संशोधन अधिनियम 1985 निम्‍नलिखित में से किससे संबंधित है / संघ राज्‍य क्षेत्र / दल-बदल विरोधी कानून / आरक्षण बढ़ाना / शाहिभत्ता समाप्‍त / 2
+निम्‍नलिखित में से कौन-सा मानव मस्तिष्‍क का मुख्‍य सोचने वाला भाग है / पश्‍च पस्तिष्‍क / प्रमस्तिष्‍क / मध्‍य मस्तिष्‍क / इनमें से कोई नहीं / 2 
+1942 में जब क्रिप्‍स मिशन भारत आया था उस समय इंग्‍लैंड के प्रधानमंत्री कौन थे / ए. वी. अलेक्‍जेंडर / विंस्‍टन चर्चिल / पैथिक लॉरेंस / क्‍लीमेंट एट्ली / 2 
+1942 में महात्‍मा गांधी द्वारा 'भारत छोड़ो आंदोलन' निम्‍नलिखित में से किस स्‍थान पर आरंभ किया गया था / अगस्‍त क्रांति मैदान / जालियाँवाला बाग / शिवाजी पार्क / प्रगति मैदान / 1 
+निम्‍नलिखित में से किस एक संवैधानिक संशोधन द्वारा मिजोरम को राज्‍य का दर्जा दिया गया है / 52वां / 53वां / 54वां / 55वां / 2 
+ए. बी. रक्‍त समूह में / एन्‍टीजन नहींं रहते / एन्‍टीबॉडी नहीं रहते / न तो एन्‍टीजन और ना ही एन्‍टीबॉडी पाए जाते हैं / एन्‍टीजन और एन्‍टीबॉडी दोनों पाए जाते हैं / 2 
+भारत में किसके शासन के अंतर्गत खिलाफत आंदोलन का आरंभ हुआ था / लॉर्ड माउंटबेटन / लॉर्ड डलहौजी / लॉर्ड चेम्‍सफोर्ड / लॉर्ड कर्जन / 3 
+भारत में जनसंख्‍या वृद्धि का कारण नहीं है / बाल विवाह / धार्मिक अंधविश्‍वास / परिवार नियोजन / गरीबी / 3 
+किस संवैधानिक संशोधन द्वारा अरूणाचल प्रदेश को राज्‍य का दर्जा दिया गया / 36वां / 44वां / 48वां / 55वां / 4 
+किस संवैधानिक संशोधन द्वारा गोवा को राज्‍य का दर्जा दिया गया / 38वां / 56वां / 44वां / 59वां / 2 
+गुटनिरपेक्ष आंदोलन के सह-संस्‍थापक थे / सी. राजगोपालाचारी / जवाहर लाल नेहरू / महात्‍मा गांधी / सरदार पटेल / 2 
+रक्‍त का द्रव घटक कौन-सा है / प्‍लेटलेट्स / श्‍वेत रूधिर कोशिकाएँ / प्‍लाज्‍मा / लाल रूधिर कोशिकाएँ / 3 
+ऑक्‍सीजन हीन रक्‍त को हृदय तक ले जोन वाली रक्‍त वाहिकाओं को किस रूप में जाना जाता है / धमनियाँ / नोड्स / लसिका नली / शिरा / 4 
+रक्‍त में श्‍वेत कणों का मुख्‍य प्रयोजन क्‍या है / पोष्‍क तत्‍वों को ले जाना / संक्रमण से संघर्ष करना / ऑक्‍सीजन को ले जाना / शक्ति प्रदान करना / 2 
+'चौरी चौरा कांड' कब हुआ था / 1920 / 1921 / 1922 / 1923 / 2 
+भारत में गांधी जी का प्रथम सत्‍याग्रह कहाँ हुआ था / चंपारण / अहमदाबाद / खेड़ा / इलाहाबाद / 1 
+निम्‍न में से किस दशक में भारत में नाकारात्‍क जनसंख्‍या वृद्धि दर्ज की गई थी / 1901 - 1911 / 1911 - 1921 / 1921 - 1931 / 1971 - 1981 / 2 
+संविधान के किस संशोधन द्वारा मतदान की आयु 21 वर्ष से 18 वष की गई थी / 61वां / 63वां / 67वां / 71वां / 1 
+74वें संविधान संशोधन का संबंध निम्‍नलिखित में से किस संस्‍था से है / ग्राम पंचायत / नगर पालिकाये / जिला परिषद / कृषि उत्‍पाद बाजार समितियां / 2 
+भारत में स्‍वरोजगार 2017 - 18 से 52% से बढ़कर कितने प्रतिशत हो गया है / 55% / 56% / 57% / 58% / 4
+भारत - पाकिस्‍तान के बीच सिंधु नदी जल समझौता किस वर्ष हुआ था / 1960 / 1962 / 1964 / 1966 / 1 
+पित्ताशय से उत्‍पन्न रस का नाम क्‍या है / लार / हाइड्रोक्‍लोरिक एसिड / पित्त का रस / माल्‍टेज / 3 
+कौन-सी घटना सबसे पहले हुई थी / भारत छोड़ो आंदोलन का प्रस्‍ताव / क्रिप्‍स मिशन का आगमन / गवर्नर-जनरल के रूप में लॉर्ड वेवेल का आगमन / कैबिनेट मिशन का आगमन / 2 
+हिन्‍दुस्‍तान गदर पार्टी की स्‍थापना किस वर्ष में हुई थी / 1911 / 1912 / 1913 / 1914 / 3 
+निम्‍नलिखित में से विश्‍व का पहला ग्राफिकल इंटरनेट ब्राउजर कैन सा है / एर्विस / क्रोम / इंटरनेट एक्‍स्प्लोरर / सफारी / 1 
+किस संवैधानिक संशोधन द्वारा संविधान की आठवीं अनुसूची में तीन भाषाओं मणिपुरी, नेपाली और कोंकणी को शामिल किया गया / 21वां / 52वां / 71वां / 97वां / 3 
+हमारे तंत्रिका तंत्र की मूल इकाई क्‍या है / न्‍यूट्रॉन / न्‍यूरॉन / नेफ्रॉन / न्‍यूक्लियॉन / 2 
+निम्‍नलिखित में से कोन-सा एंजाइम मानव पेट में मौजूद नहीं है / पेप्सिन / हाइड्रोक्‍लोरिक एसिड / ट्रिप्सिन / म्‍युकस / 3 
+खादी स्‍वतंत्रता का प्रतीक है। यह परिभाषा किसने दी थी / सुभाष चंद्र बोस / महात्‍मा गांधी / लाला हरदयाल / बाल गंगाधर तिलक / 2 
+भारत में असहयोग आंदोलन किस वर्ष शुरू हुआ था / 1919 / 1920 / 1921 / 1922 / 2 
+भारत सरकार ने किस वर्ष एक व्‍यापक परिवार नियोजन कार्यक्रम शुरू किया था / 1942 / 1952 / 1962 / 1972 / 2 
+भारत के संविधान के 73वें संशोधन का संबंध है / केंद्र-राज्‍य संबंध है / सर्वोच्‍च न्‍यायालय की शक्तियों के वेतन तथा विशेषाधिकारों से / पंचायती राज व्‍यवस्‍था से / 4 
+निम्‍नलिखित में से कौन-सी पुस्‍तक मुंशी प्रेमचन्‍द द्वारा नहीं लिखी गई है / गाइड / गोदान / मानसरोवर / गबन / 1 
+मानव शरीर का कौन-सा रक्‍त समूह दुर्लभ है / ओ निगेटिव / एबी पॉजिटिव / एबी निगेटिव / ओ पॉजिटिव / 3 
+हमारे गुर्दे के उपर कौन-सी ग्रंथी है / अधिवृक्‍क / पिट्यूटरी / गोनाड्स / लार / 1 
+लंदन में इंडिया हाऊस के संस्‍थापक कौन थे / मदन लाल धींगरा / बालकृष्‍ण हरि चापेकर / श्‍यामजी कृष्‍ण वर्मा / वी.डी. सावरकर / 3 
+'वन लाइफ इज नोट इनफ' पुस्‍तक के लेखक कौन है / नटवर सिंह / लाल कृष्‍ण अडवाणी / पी.वी.नरसिम्‍हा राव / एल्‍के. एन्‍टोनी / 1 
+मानव मस्तिष्‍क के निलय की कुल संख्‍या कितनी है / 4 / 5 / 6 / 7 / 1
+42वें संविधान संशोधन द्वारा जोड़ा गया नया अनुच्‍छेद संबंधित है / संपत्ति के अधिकार से / मूल कर्तव्‍यों से / भुमि सुधार से / व्‍यवासय से / 2 
+अरविन्‍द घोष के द्वारा रचित 'भवानी मन्दिर' निम्‍न में किस रचना से प्रेरित थी / आनन्‍द मठ / देवी चौधरानी / वर्तमान रणनीति / दर्गेश नन्दिनी / 1 
+इंडिया विन्‍स फ्रीडम निम्‍न में से किससे संबंधित है / मौलाना अब्‍दुल कलाम आजाद / मोहम्‍मद अली जिन्‍ना / खान अब्‍दुल गफ्फार खान / सर सैय्यद अहमद खाँ / 1 
+दाँत का इनेमल बनता है / कैल्शियम क्‍लोराइड से / कैल्शियम कार्बोनेट से / कैल्शियम फॉस्फेट से / कैल्शियम सल्‍फेट से / 3 
+प्‍लाजमा में इंसुलिन की अर्धआयु कितनी होती है / 90 मिनट / 45 मिनट / 30 मिनट / 06 मिनट / 4 
+सीमांत गांधी के नाम से किसे जाना जाता है / खान अब्‍दुल गफ्फार खान / मोहम्‍मद रसूक / महात्‍मा गांधी / सरदार पटेल / 1 
+14-15 अगस्‍त 1947 की मध्‍य रात्रि को पंडित जवाहर लाल नेहरू द्वारा दिया गया प्रसिद्ध भाषण कहा जाता है / ट्रिस्‍ट एण्‍ड को-ऑपरेशन / ट्रिस्‍ट विद डेस्टिनी / ट्राइड विद डेस्टिनी / ट्रिस्‍ट विद ऑनेस्‍टी / 2 
+भारतीय जनगणना 2011 के अयुक्‍त और महापंजीयक कौन थे / श्री सी. चंद्रमौली / श्री विवेक जोशी / श्री डब्‍लू डब्‍लू प्‍लॉवडेन / श्री ई्.ए. गेट / 1 
+जनगणना 2011 के अनुसार किस राज्‍य का लिंगानुपात सर्वाधिक है / पुदुच्‍चेरी / चंडीगढ़ / केरल / मेघालय / 3 
+भारत के संविधान में नवीं अनुसूची किस संशोधन अधिनियम द्वारा जोड़ी गई / तीसरा संशोधन अधिनियम / पहला संशोधन अधनियम / चौथा संशोधन अधिनियम / दूसरा संशोधन अधिनियम / 2 
+हिन्‍द स्‍वराज पुस्‍तक के लेखक कौन है / राम मनोहर लोहिया / स्‍वामी दयानन्‍द सरस्‍वती / महात्‍मा गाँधी / मौलाना अबुल कलाम आजाद / 3 
+इंडिया वार ऑफ इंडिपेंडेंस पुस्‍तक के लेखक कौन है / लाला लाजपतराय / मौलाना आजाद / चन्‍द्रशेखर आजाद / वी.डी. सावरकर / 4 
+स्‍वतंत्र भारत के पहले उप-प्रधानमंत्री और गृह मंत्री कौन थे / रफ अहमद किदवई / महात्‍मा गांधी / सी. राज गोपालाचारी / सरदार वल्‍लभभाई पटेल / 4 
+भारत में कौन-सा जनगणना वर्ष 'जनसांख्यिकी विभाजन' का वर्ष कहा जाता है / 1911 / 1921 / 1931 / 1941 / 2 
+किसने रक्‍त को विभिन्‍न वर्गो में विभाजित किया था / कार्ल लैन्‍डस्‍टीनर / लुई पाश्‍चर / रॉबर्ट कोच / एडवर्ड जैनर / 1 
+1943 में इंडियन नेशनल आर्मी में महिला रेजिमेंट की स्‍थापना किसने की थी / जवाहरलाल नेहरू / सुभाषचंद्र बोस / महात्‍मा गांधी / सरोजिनी नायडू / 2 
+निम्‍नलिखित में से 'अनुकूलतम जनसंख्‍या सिद्धांत' किसके द्वारा दिया गया था / एडवर्ड वेस्‍ट / एडविन कैनन / मारगरेट स्‍ट्रैन्‍जर / थॉमस सैडलर / 2 
+भारतीय संविधान के किस भाग में पंचायती राज से संबंधित प्रावधान है / 6 / 7 / 8 / 9 / 4 
+'आनंद मठ' उपन्‍यास के लेखक कौन थे / बंकिम चन्‍द्र चट्टोपाध्‍याय / वीर सावरकर / लोकमान्‍य तिकल / रंग बापूजी / 1 
+पंचायती राज प्रणाली किस पर आधारित है / सत्ता के केन्‍द्रीयकरण पर / सत्ता के विकेंद्रीकरण पर / प्रशासनिक वजनता के सहयोग पर / ये सभी / 2 
+मानव में आहार नाल का सबसे लम्‍बा भाग है / ग्रास नली / छोटी आँत / बड़ी आँत / आमाशय / 2 
+पट्टाचित्रा कला किस राज्‍य की लोक चित्रकला है / आंध्र प्रदेश / बिहार / गुजरात / ओडिशा / 4 
+निम्‍नलिख‍ित में से कौन-सा मानव श्‍वसन तंत्र का भाग नहीं है / कूपिकाएं / मेड्यूला / कंठ / श्वसनली / 2 
+ई-मेल का विस्‍‍तृत रूप क्‍या है / Easy Mail / Electric Mail / Extra Mail / Electronic Mail / 4 
+भारत में निम्‍नलिखित में से किसके अंतर्गत पंचायती राज प्रणाली की व्‍यवस्‍था की गई है / मोलिक अधिकार / मूल कर्तव्‍य : निति निर्देशक तत्‍वों / इनमें से कोई नहीं / 3 
+प्रसिद्ध चित्र 'लास्‍ट सपर' किसके द्वारा बनाई गई थी / लियोनार्डो द विंसी / पाब्‍लो पिकासो / क्‍लाउड मोनेट / मिषेल एंजेलो / 1 
+भारत में शैल चित्रों की खोज प्रथमत: किसके द्वारा की गई थी / वी. एस. वाकणकर / इरविन न्‍यूमेयर / ए.सी. एल. कार्लाइल / 4 
+निम्‍नलिखित में से कौन-सा मानव नर जनन तंत्र का भाग नहीं है / शुक्रवाहक / वृषण / शुक्राशय / फैलोपियन नलिका / 4 
+निम्‍नलिखित में से कौन-सा मनुष्‍यों में दांतों का एक प्रकार नहीं है / कृंतक / अग्र चर्वणक / पाइलोरस / रदनक / 3 
+हमारे शरीर में रक्‍त शर्करा के स्‍तर को नियंत्रित करने वाला हार्मोन है / थायरोक्सिन / टेस्‍टोस्‍टेरोन / एड्रीनेलिन / इन्‍सुलिन / 4 
+इंसुलिन हार्मोन का उत्‍पादन कहाँ होता है / अधिवृक्‍क में / यकृत में / अग्‍नाश्‍य में / पित्ताशय में / 3 
+भारतीय राष्‍ट्रीय कांग्रेस की प्रथम भारतीय महिला अध्‍यक्ष थी / राजकुमारी अग्रत कौर / सरोजनी नायडू / विजय लक्ष्‍मी पंडित / एनीबेसेंट / 2 
+'बारहमासा' की रचना किसने की थी / अमीर खुसरो / इमामी / मलिक मोहम्‍मद जायसी / रसखान / 3    
+किस अभिलेख से यह साबित होता है कि चन्‍द्रगुप्‍त का प्रभाव पश्चिम भारत पर फैला हुआ था / कलिंग का अभिलेख / अशोक का गिरनार अभिलेख / रूद्रदमन का जूनागढ़ अभिलेख / अशोक का सोपारा अभिलेख / 3 
+गायत्री मंत्र किस पुस्‍तक में मिलता है / उपनिषद् / भागवतगीता / ऋृगवेद / यजुर्वेद / 3 
+सिंधु सभ्‍यता निम्‍न में से किस काल में पड़ती है / ऐतिहासिक काल / प्रागैतिहासिक काल / उत्तर ऐतिहासिक काल / आदि-ऐतिहासिक काल / 4 
+800 से 600 ईसा पूर्व का काल किस युग से जुड़ा है / ब्राह्मण युग / सूत्र युग / रामायण युग / महाभारत युग / 1 
+जब्‍ती प्रणाली किसकी उपज थी / गयासुद्दीन तुगलक / सिकन्‍दर लोदी / शेरशाह / अकबर / 4 
+अमेरिका में 'फ्री हिन्‍दुस्‍तान' अखबार किसने शुरू किया था / रामनाथ पुरी / जी.डी. कुमार / लाला हरदयाल / तारकनाथ दास / 4 
+गदर क्रांति‍ छि‍ड़ने का सबसे महत्‍वपूर्ण कारण था / लाला हरदयाल की गिरफ्तारी / कामागाटामारू घटना / प्रथम महायुद्ध शुरू / करतार सिंह सराभा को फांसी / 2  
+भारत में 1612 में अंग्रेजों ने अपनी पहली फैक्‍ट्री कहाँ स्‍थापित की थाी / गोवा / बंगाल में हुगली / अमरकोट / सूरत / 4 
+पटना उच्‍च न्‍यायालय की स्‍थापना कब हुई / 1916 / 1917 / 1918 / 1921 / 1 
+छोटानागपुर जनजाति विद्रोह कब हुआ था / 1807 - 1808 / 1820 / 1858 - 59 / 1889 / 2 
+गांधीजी का चम्‍पारण सत्‍याग्रह किससे जुड़ा था / इजारादारी / तीनकठिया / जेनमीस / कोई भी नहीं / 1 
+उलगुलान विद्रोह किससे जुड़ा था / संथाल / कच्‍छा नागा / कोल / बिरसा मुण्‍डा / 4  
+बिहार बंगाल से कब अलग हुआ था / 1911 / 1912 / 1913 / 1914 / 2 
+
+
+
+
+
+`;
+
+const recordPattern = /([\s\S]*?)\s*\/\s*([^/]*?)\s*\/\s*([^/]*?)\s*\/\s*([^/]*?)\s*\/\s*([^/]*?)\s*\/\s*([1-4])(?=\s|$)/g;
+const quizData = [...quizDataText.trim().matchAll(recordPattern)].map((match, index) => {
+  const fields = match.slice(1).map((field) => field.trim());
+  if (fields.length !== 6) {
+    throw new Error(`Question ${index + 1} must have 6 fields separated by /`);
+  }
+  const correctOption = Number(fields[5]);
+  if (!Number.isInteger(correctOption) || correctOption < 1 || correctOption > 4) {
+    throw new Error(`Question ${index + 1} correct option must be a number from 1 to 4`);
+  }
+  return { q: fields[0], o: fields.slice(1, 5), a: correctOption - 1 };
+});
+
+function formatQuestion(question) {
+  return /[?؟]\s*$/.test(question) ? question : `${question}?`;
+}
+
+/* ================
+   Sequential quiz flow
+   ================ */
+const quizEl = document.getElementById("quiz");
+const startQuizBtn = document.getElementById("startQuizBtn");
+const nextBtn = document.getElementById("nextBtn");
+const submitBtn = document.getElementById("submitBtn");
+const restartBtn = document.getElementById("restartBtn");
+const scoreModal = document.getElementById("scoreModal");
+const scoreTitle = document.getElementById("scoreTitle");
+const scoreDesc = document.getElementById("scoreDesc");
+const showAnswersBtn = document.getElementById("showAnswersBtn");
+let currentQuestionIndex = 0;
+let reviewMode = false;
+let questionTimerId = null;
+const totalTimeSeconds = 3600;
+let timeLeft = totalTimeSeconds;
+let timerStarted = false;
+const userAnswers = new Array(quizData.length).fill(null);
+
+function formatTime(totalSeconds) {
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  return [hours, minutes, seconds].map((value) => String(value).padStart(2, "0")).join(":");
+}
+
+function clearQuestionTimer() {
+  if (questionTimerId) {
+    clearInterval(questionTimerId);
+    questionTimerId = null;
+  }
+}
+
+function startQuestionTimer() {
+  clearQuestionTimer();
+  if (reviewMode) return;
+
+  timerStarted = true;
+  const timerBox = document.getElementById("questionTimer");
+  if (timerBox) {
+    timerBox.textContent = `Time: ${formatTime(timeLeft)}`;
+  }
+
+  questionTimerId = setInterval(() => {
+    timeLeft -= 1;
+    if (timerBox) {
+      timerBox.textContent = `Time: ${formatTime(timeLeft)}`;
+    }
+
+    if (timeLeft <= 0) {
+      clearQuestionTimer();
+      if (currentQuestionIndex < quizData.length - 1) {
+        currentQuestionIndex += 1;
+        renderQuestion();
+      } else {
+        submitQuiz();
+      }
+    }
+  }, 1000);
+}
+
+function updateControls() {
+  const isLast = currentQuestionIndex === quizData.length - 1;
+
+  nextBtn.style.display = reviewMode ? (isLast ? "none" : "inline-block") : "inline-block";
+  submitBtn.style.display = "none";
+  restartBtn.style.display = reviewMode ? "inline-block" : "none";
+
+  nextBtn.textContent = isLast && !reviewMode ? "Submit" : "Next";
+}
+
+function showStartScreen() {
+  clearQuestionTimer();
+  timerStarted = false;
+  timeLeft = totalTimeSeconds;
+  reviewMode = false;
+  currentQuestionIndex = 0;
+  quizEl.innerHTML = "";
+  startQuizBtn.style.display = "inline-flex";
+}
+
+function startQuiz() {
+  timeLeft = totalTimeSeconds;
+  timerStarted = true;
+  reviewMode = false;
+  currentQuestionIndex = 0;
+  startQuizBtn.style.display = "none";
+  renderQuestion();
+}
+
+function renderQuestion() {
+  clearQuestionTimer();
+  quizEl.innerHTML = "";
+
+  const currentQuestion = quizData[currentQuestionIndex];
+  const selectedAnswer = userAnswers[currentQuestionIndex];
+  const questionAnswered = selectedAnswer !== null;
+
+  const metaRow = document.createElement("div");
+  metaRow.className = "question-meta";
+
+  const startWrap = document.createElement("div");
+  startWrap.className = "start-quiz-wrap";
+  startWrap.appendChild(startQuizBtn);
+
+  const quizTitle = document.createElement("h1");
+  quizTitle.id = "quizTitle";
+  quizTitle.textContent = "100 Gk";
+
+  const counter = document.createElement("div");
+  counter.id = "questionCounter";
+  counter.className = "meta-box";
+  counter.textContent = `Question ${currentQuestionIndex + 1}/${quizData.length}`;
+
+  const timer = document.createElement("div");
+  timer.id = "questionTimer";
+  timer.className = "meta-box";
+  timer.textContent = `Time: ${formatTime(timerStarted ? timeLeft : totalTimeSeconds)}`;
+
+  metaRow.appendChild(counter);
+  metaRow.appendChild(startWrap);
+  metaRow.appendChild(quizTitle);
+  metaRow.appendChild(timer);
+  startQuizBtn.style.display = timerStarted || reviewMode ? "none" : "inline-flex";
+  quizEl.appendChild(metaRow);
+
+  const card = document.createElement("div");
+  card.className = "question";
+
+  const title = document.createElement("p");
+  title.className = "q-title";
+  title.textContent = `${String(currentQuestionIndex + 1).padStart(2, "0")}. ${formatQuestion(currentQuestion.q)}`;
+
+  const opts = document.createElement("div");
+  opts.className = "options";
+
+  currentQuestion.o.forEach((opt, optionIndex) => {
+    const id = `q${currentQuestionIndex}-o${optionIndex}`;
+    const label = document.createElement("label");
+    label.className = "option";
+    label.setAttribute("for", id);
+
+    const input = document.createElement("input");
+    input.type = "radio";
+    input.id = id;
+    input.name = `q${currentQuestionIndex}`;
+    input.value = optionIndex;
+    input.checked = selectedAnswer === optionIndex;
+
+    if (reviewMode || questionAnswered) {
+      input.disabled = true;
+      if (optionIndex === currentQuestion.a) {
+        label.classList.add("correct");
+      }
+      if (selectedAnswer === optionIndex && selectedAnswer !== currentQuestion.a) {
+        label.classList.add("incorrect");
+      }
+    } else {
+      input.addEventListener("change", () => {
+        userAnswers[currentQuestionIndex] = Number(input.value);
+        if (!timerStarted) {
+          timeLeft = totalTimeSeconds;
+          timerStarted = true;
+          startQuestionTimer();
+        }
+        renderQuestion();
+      });
+    }
+
+    const span = document.createElement("span");
+    span.className = "option-text";
+    span.textContent = opt;
+
+    label.appendChild(input);
+    label.appendChild(span);
+    opts.appendChild(label);
+  });
+
+  card.appendChild(title);
+  card.appendChild(opts);
+
+  if (reviewMode || questionAnswered) {
+    const result = document.createElement("div");
+    result.className = "result-message";
+    result.style.display = "none";
+    card.appendChild(result);
+  }
+
+  quizEl.appendChild(card);
+
+  title.style.height = "auto";
+  const lineHeight = parseFloat(getComputedStyle(title).lineHeight);
+  if (title.scrollHeight > lineHeight * 3 + 1) {
+    title.classList.add("dense");
+  }
+  title.style.height = "";
+
+  updateControls();
+
+  if (!reviewMode && timerStarted) {
+    startQuestionTimer();
+  }
+}
+
+function showAnswers() {
+  clearQuestionTimer();
+  timerStarted = false;
+  reviewMode = true;
+  currentQuestionIndex = 0;
+  renderQuestion();
+  scoreModal.style.display = "none";
+}
+
+function submitQuiz() {
+  let score = 0;
+  let attempted = 0;
+  quizData.forEach((item, qi) => {
+    if (userAnswers[qi] !== null) {
+      attempted++;
+      if (Number(userAnswers[qi]) === item.a) score++;
+    }
+  });
+
+  scoreTitle.textContent = `आपका स्कोर: ${score}/${quizData.length}`;
+  const incorrect = attempted - score;
+  const notAttempted = quizData.length - attempted;
+  scoreDesc.textContent = `सही उत्तर: ${score} • गलत उत्तर: ${incorrect} • Not Attempted: ${notAttempted}`;
+  scoreModal.style.display = "flex";
+}
+
+nextBtn.addEventListener("click", () => {
+  if (reviewMode) {
+    if (currentQuestionIndex < quizData.length - 1) {
+      currentQuestionIndex += 1;
+      renderQuestion();
+    }
+  } else {
+    if (currentQuestionIndex < quizData.length - 1) {
+      currentQuestionIndex += 1;
+      renderQuestion();
+    } else {
+      submitQuiz();
+    }
+  }
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+submitBtn.addEventListener("click", submitQuiz);
+
+startQuizBtn.addEventListener("click", startQuiz);
+showAnswersBtn.addEventListener("click", restartQuiz);
+
+function restartQuiz() {
+  clearQuestionTimer();
+  timerStarted = false;
+  timeLeft = totalTimeSeconds;
+  reviewMode = false;
+  currentQuestionIndex = 0;
+  userAnswers.fill(null);
+  scoreModal.style.display = "none";
+  renderQuestion();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+restartBtn.addEventListener("click", restartQuiz);
+
+scoreModal.addEventListener("click", (e) => {
+  if (e.target === scoreModal) scoreModal.style.display = "none";
+});
+
+renderQuestion();
+
+</script>
+</body>
+</html>

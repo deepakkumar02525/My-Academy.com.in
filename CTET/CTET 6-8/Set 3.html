@@ -1,0 +1,1189 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+  <title>करेंट अफेयर्स</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@400;600;700;800&display=swap');
+
+    :root{
+      --bg:#dfe9fb;
+      --card:#ffffff;
+      --text:#222;
+      --muted:#6b7280;
+      --accent:#2563eb;
+      --ok:#16a34a;
+      --bad:#dc2626;
+      --border:#e5e7eb;
+      --radius:14px;
+      --space:14px;
+
+      /* Base font sizes (mobile-first) */
+      --fs-body:19px;
+      --fs-label:19px;
+      --fs-h1:27px;
+      --fs-brand:31px; /* ~2pt (≈2.66px) बड़ा than h1 */
+      --fs-btn:19px;
+    }
+    @media (min-width:480px){
+      :root{
+        --fs-body:19px;
+        --fs-label:20px;
+        --fs-h1:29px;
+        --fs-brand:33px;
+        --fs-btn:19px;
+      }
+    }
+    @media (min-width:768px){
+      :root{
+        --fs-body:19px;
+        --fs-label:21px;
+        --fs-h1:31px;
+        --fs-brand:35px;
+        --fs-btn:19px;
+      }
+    }
+
+    *{box-sizing:border-box}
+    html {
+      height: 100%;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    html::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+      display: none;
+    }
+    body{
+      margin:0;
+      padding:8px 14px 24px;
+      min-height:100vh;
+      font-family:"Noto Serif Devanagari","Sanskrit Text","Noto Sans Devanagari","Nirmala UI",Mangal,serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.5;
+      font-size:var(--fs-body);
+      box-sizing:border-box;
+      overflow-x:hidden;
+      overflow-y:auto;
+      scrollbar-width:none;
+      -ms-overflow-style:none;
+      -webkit-text-size-adjust:100%;
+      text-rendering:optimizeLegibility;
+    }
+    body::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+      display: none;
+    }
+    .site-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      max-width:980px;
+      margin:0 auto;
+      position:relative;
+    }
+    .brand{
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      font-weight:800;
+      color:#ef4444; /* red */
+      font-size:var(--fs-brand);
+      letter-spacing:.2px;
+    }
+    .social-links{
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      gap:8px;
+      margin-left:auto;
+    }
+    .social-link{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:38px;
+      height:38px;
+      border-radius:50%;
+      color:#fff;
+      text-decoration:none;
+      transition:transform .15s ease, box-shadow .15s ease;
+    }
+    .social-link:hover{
+      transform:translateY(-1px);
+      box-shadow:0 5px 12px rgba(15,23,42,.2);
+    }
+    .social-link svg{
+      width:21px;
+      height:21px;
+      fill:currentColor;
+    }
+    .youtube-link{ background:#ef4444; }
+    .telegram-link{ background:#0ea5e9; }
+    .whatsapp-link{ background:#22c55e; }
+    .social-link:focus-visible{
+      outline:3px solid rgba(37,99,235,.45);
+      outline-offset:3px;
+    }
+    h1{
+      text-align:center;
+      font-size:var(--fs-h1);
+      margin:12px 0 18px;
+      color:#111827;
+    }
+    #quizTitle{
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      margin:0;
+      font-size:var(--fs-h1);
+      line-height:1.2;
+      white-space:nowrap;
+    }
+
+    .quiz-container{
+      max-width:980px;
+      margin:0 auto;
+      display:grid;
+      gap:6px;
+    }
+    .question{
+      background:linear-gradient(135deg, #f8fbff 0%, #eef6ff 38%, #eaf1ff 100%);
+      border:1px solid rgba(147, 197, 253, 0.65);
+      border-radius:var(--radius);
+      padding:16px;
+      height:410px;
+      overflow:hidden;
+      box-shadow:0 6px 22px rgba(59, 130, 246, 0.12);
+    }
+    .question-meta{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin:0 0 10px;
+      position:relative;
+    }
+    .meta-box{
+      display:inline-flex;
+      align-items:center;
+      min-height:42px;
+      padding:8px 14px;
+      border-radius:10px;
+      background:rgba(255,255,255,0.18);
+      border:1px solid rgba(59, 130, 246, 0.25);
+      color:#1f2937;
+      font-weight:800;
+      font-size:1.05rem;
+      box-shadow:0 2px 10px rgba(59, 130, 246, 0.1);
+      text-align:left;
+      line-height:1.4;
+    }
+    #questionCounter{
+      justify-content:flex-start;
+      min-width:150px;
+    }
+    #questionTimer{
+      justify-content:flex-end;
+      min-width:120px;
+      margin-left:auto;
+    }
+    .q-title{
+      font-weight:800;
+      font-size:1.25rem;
+      line-height:1.7;
+      white-space:pre-line;
+      height:auto;
+      overflow:hidden;
+      margin:0 0 4px;
+      color:#0f172a;
+      text-shadow:none;
+    }
+    .q-title.compact{
+      font-size:1.1rem;
+      line-height:1.55;
+    }
+    .q-title.dense{
+      font-size:1rem;
+      line-height:1.45;
+    }
+    .options{
+      display:flex;
+      flex-direction:column;
+      gap:10px; /* vertical spacing line by line */
+    }
+
+    /* Each option as a separate box */
+    .options label.option{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:12px 14px;
+      border:2px solid rgba(96, 165, 250, 0.5);
+      border-radius:12px;
+      background:linear-gradient(135deg, #ffffff 0%, #edf6ff 100%);
+      cursor:pointer;
+      transition:all .15s ease;
+      font-size:var(--fs-label);
+      user-select:none;
+      color:#0f172a;
+    }
+    .options label.option:hover{
+      border-color:#60a5fa;
+      background:linear-gradient(135deg, #f8fbff 0%, #e0ecff 100%);
+    }
+    .option-text{
+      flex:1;
+      line-height:1.5;
+      color:#0f172a;
+      font-weight:700;
+      text-shadow:none;
+    }
+
+    /* Bigger radio for mobile */
+    .options input[type="radio"]{
+      appearance:none;
+      width:26px;
+      height:26px;
+      min-width:26px;
+      min-height:26px;
+      border:2px solid #9ca3af;
+      border-radius:50%;
+      display:inline-block;
+      position:relative;
+      outline:none;
+      transition:border-color .15s ease, box-shadow .15s ease;
+      background:#fff;
+    }
+    .options input[type="radio"]:checked{
+      border-color:#60a5fa;
+      box-shadow:0 0 0 3px rgba(96,165,250,0.12);
+    }
+    .options input[type="radio"]::after{
+      content:"";
+      position:absolute;
+      inset:5px;
+      border-radius:50%;
+      background:transparent;
+      transition:background .15s ease;
+    }
+    .options input[type="radio"]:checked::after{
+      background:#60a5fa;
+    }
+    .options input[type="radio"]:checked ~ .option-text,
+    .options label.option:has(input:checked) .option-text{
+      color:#0f172a;
+      text-shadow:none;
+    }
+    .options label.option:has(input:checked){
+      background:linear-gradient(135deg, #ffffff 0%, #edf6ff 100%);
+      border-color:#60a5fa;
+      box-shadow:none;
+    }
+
+    /* Correct/Incorrect colors */
+    .option.correct{
+      background:#dcfce7 !important;
+      border-color:var(--ok) !important;
+    }
+    .option.incorrect{
+      background:#fee2e2 !important;
+      border-color:var(--bad) !important;
+    }
+    .result-message{
+      margin-top:12px;
+      padding:10px 12px;
+      border-radius:10px;
+      background:rgba(255,255,255,0.8);
+      border:1px solid rgba(148, 163, 184, 0.4);
+      font-weight:800;
+      line-height:1.5;
+    }
+
+    /* Buttons row (submit + restart) */
+    .actions{
+      position:sticky;
+      bottom:0;
+      left:0; right:0;
+      background:rgba(247,247,251,.85);
+      backdrop-filter: blur(6px);
+      border-top:1px solid var(--border);
+      padding:12px 10px;
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      z-index:5;
+    }
+    .btn{
+      border:0;
+      border-radius:999px;
+      padding:12px 18px;
+      font-weight:700;
+      font-size:var(--fs-btn);
+      cursor:pointer;
+      box-shadow:0 4px 14px rgba(0,0,0,.08);
+      transition:transform .15s ease, box-shadow .15s ease;
+    }
+    .start-quiz-wrap{
+      display:flex;
+      justify-content:flex-start;
+      align-items:center;
+      margin:0;
+    }
+    .start-quiz-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:38px;
+      min-width:116px;
+      padding:8px 11px;
+      border-radius:10px;
+      background:linear-gradient(135deg, #2563eb, #7c3aed);
+      color:#fff;
+      font-size:.8rem;
+      font-weight:800;
+      line-height:1.2;
+      box-shadow:0 8px 18px rgba(37, 99, 235, 0.2);
+      margin-left:0;
+    }
+    .start-quiz-btn:disabled{
+      opacity:0.75;
+      cursor:not-allowed;
+    }
+    .btn:hover{
+      transform:translateY(-1px);
+      box-shadow:0 8px 18px rgba(0,0,0,.12);
+    }
+    .btn-submit{ background:#22c55e; color:#fff; }
+    .btn-final-submit{ background:#7c3aed; color:#fff; }
+    .btn-restart{ background:#ef4444; color:#fff; }
+    #prevBtn,
+    #nextBtn{
+      min-width:150px;
+      font-size:20px;
+      padding:14px 22px;
+      background:linear-gradient(135deg, #2563eb, #7c3aed);
+      color:#fff;
+      box-shadow:none;
+      border:0;
+      outline:none;
+    }
+
+    #prevBtn:hover,
+    #nextBtn:hover{
+      box-shadow:none;
+    }
+
+    /* Score modal */
+    .modal{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.4);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      z-index:50;
+    }
+    .modal .card{
+      background:#fff;
+      border-radius:18px;
+      padding:24px;
+      width:min(520px, 96vw);
+      text-align:center;
+      box-shadow:0 10px 30px rgba(0,0,0,.2);
+    }
+    .score{
+      font-size:28px;
+      font-weight:800;
+      margin:8px 0 2px;
+      color:#111827;
+    }
+    .note{
+      font-size:16px;
+      color:var(--muted);
+      margin-bottom:14px;
+    }
+    .modal .btn{
+      width:100%;
+    }
+    .sr-only{
+      position:absolute!important;
+      height:1px;width:1px;
+      overflow:hidden;clip:rect(1px,1px,1px,1px);
+      white-space:nowrap;border:0;padding:0;margin:-1px;
+    }
+
+    @media (max-width: 480px){
+      body{
+        padding:8px 10px 18px;
+      }
+      .site-header{
+        gap:10px;
+      }
+      .brand{
+        font-size:24px;
+        line-height:1.3;
+      }
+      .social-links{
+        gap:6px;
+      }
+      .social-link{
+        width:34px;
+        height:34px;
+      }
+      .social-link svg{
+        width:18px;
+        height:18px;
+      }
+      h1{
+        font-size:24px;
+        margin-bottom:12px;
+      }
+      .quiz-container{
+        gap:4px;
+      }
+      .question{
+        padding:12px;
+        height:360px;
+      }
+      .question-meta{
+        gap:8px;
+        align-items:center;
+        flex-wrap:wrap;
+      }
+      .meta-box{
+        min-height:36px;
+        padding:7px 10px;
+        font-size:0.9rem;
+      }
+      #questionCounter{
+        min-width:0;
+      }
+      #questionTimer{
+        min-width:90px;
+      }
+      .start-quiz-btn{
+        min-height:34px;
+        min-width:104px;
+        padding:7px 9px;
+        font-size:.76rem;
+      }
+      .q-title{
+        font-size:1.08rem;
+        line-height:1.6;
+        height:auto;
+        margin-bottom:4px;
+        word-break:break-word;
+      }
+      .q-title.dense{
+        font-size:.92rem;
+        line-height:1.4;
+      }
+      .options{
+        gap:8px;
+      }
+      .options label.option{
+        align-items:flex-start;
+        gap:10px;
+        padding:10px 12px;
+      }
+      .option-text{
+        font-size:0.95rem;
+        line-height:1.5;
+        word-break:break-word;
+      }
+      .actions{
+        padding:10px 8px 12px;
+        gap:8px;
+      }
+      .btn{
+        padding:11px 14px;
+        font-size:15px;
+      }
+      #prevBtn,
+      #nextBtn{
+        min-width:110px;
+        padding:12px 14px;
+        font-size:15px;
+      }
+      .modal .card{
+        padding:18px 16px;
+      }
+      .score{
+        font-size:24px;
+      }
+      .note{
+        font-size:14px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="site-header">
+    <div class="brand">My Academy</div>
+    <nav class="social-links" aria-label="Social links">
+      <a class="social-link youtube-link" href="http://www.youtube.com/@CurrentAffirs474" target="_blank" rel="noopener" aria-label="YouTube" title="YouTube">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6-6.3 3.6Z"/></svg>
+      </a>
+      <a class="social-link telegram-link" href="https://t.me/testexamdk" target="_blank" rel="noopener" aria-label="Telegram" title="Telegram">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 2 3 9.5l7.2 2.3L12.5 19l3.4-5.3L22 2Zm-3.2 3.5-6.8 5.2-5.3-1.7 12.1-3.5Z"/></svg>
+      </a>
+      <a class="social-link whatsapp-link" href="https://whatsapp.com/channel/0029Va5aFHK9MF8zXUIKM83k" target="_blank" rel="noopener" aria-label="WhatsApp" title="WhatsApp">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a9.9 9.9 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm0 18.1a8.1 8.1 0 0 1-4.1-1.1l-.3-.2-3.1.8.8-3-.2-.3A8.1 8.1 0 1 1 12 20.1Zm4.4-6.1c-.2-.1-1.3-.6-1.5-.7-.2-.1-.4-.1-.5.1l-.7.9c-.1.1-.3.2-.5.1a6.5 6.5 0 0 1-1.9-1.2 7.2 7.2 0 0 1-1.3-1.6c-.1-.2 0-.3.1-.4l.4-.5c.1-.1.1-.3.2-.4.1-.1 0-.3 0-.4l-.7-1.6c-.2-.4-.4-.4-.5-.4h-.4c-.2 0-.4.1-.6.3a2.4 2.4 0 0 0-.8 1.8c0 1 .7 2 0.8 2.1.1.1 1.4 2.2 3.5 3.1.5.2 1 .4 1.3.5.5.2 1 .1 1.4.1.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.1-1-.1-.1-.2-.1-.4-.2Z"/></svg>
+      </a>
+    </nav>
+  </div>
+  <button class="btn start-quiz-btn" id="startQuizBtn" type="button" style="display:none;">Start Quiz</button>
+
+  <div class="quiz-container" id="quiz" aria-live="polite"></div>
+
+  <div class="actions">
+    <button class="btn btn-submit" id="nextBtn">Next</button>
+    <button class="btn btn-submit" id="submitBtn" style="display:none;">Submit</button>
+    <button class="btn btn-restart" id="restartBtn" style="display:none;">Restart</button>
+  </div>
+
+  <!-- Score Modal -->
+  <div class="modal" id="scoreModal" role="dialog" aria-modal="true" aria-labelledby="scoreTitle" aria-describedby="scoreDesc">
+    <div class="card">
+      <div id="scoreTitle" class="score">आपका स्कोर</div>
+      <div id="scoreDesc" class="note">—</div>
+      <button class="btn btn-submit" id="showAnswersBtn">Restart Quiz</button>
+    </div>
+  </div>
+
+<script>
+/* =========================
+   Q&A DATA
+  Format: Question / Option 1 / Option 2 / Option 3 / Option 4 / Correct option number
+  Questions may be separated by a line break or a blank line. Line breaks inside a question are preserved.
+   Example: भारत की राजधानी क्या है? / मुंबई / दिल्ली / पटना / जयपुर / 2
+   ========================= */
+const quizDataText = `
+बच्चे के विकास में परिपक्वता और सीखने का संबंध कैसा है? / दोनों एक-दूसरे से जुड़े हैं / दोनों पूरी तरह अलग हैं / केवल परिपक्वता महत्वपूर्ण है / केवल सीखना महत्वपूर्ण है / 3
+
+बाल विकास का कौन-सा सिद्धांत बताता है कि विकास की गति सभी बच्चों में समान नहीं होती? / विकास में व्यक्तिगत भिन्नता होती है / विकास केवल जन्म के समय निर्धारित होता है / सभी बच्चे एक जैसे विकसित होते हैं / विकास अचानक होता है / 1
+
+पियाजे के अनुसार बच्चा वस्तुओं को मानसिक रूप से व्यवस्थित करने की क्षमता किस प्रक्रिया से विकसित करता है? / अनुबंधन / संगठन / दंड / अनुकरण / 2
+
+वाइगोत्स्की के अनुसार भाषा और विचार के विकास में किसकी महत्वपूर्ण भूमिका है? / सामाजिक अंतःक्रिया / केवल जैविक वृद्धि / केवल परीक्षा / केवल अनुशासन / 1
+
+यदि शिक्षक किसी कठिन कार्य को छोटे चरणों में बाँटकर विद्यार्थी की सहायता करता है, तो यह किसका उदाहरण है? / दंड / स्कैफोल्डिंग / अनुकरण / प्रतियोगिता / 2
+
+कक्षा में विविध पृष्ठभूमि वाले बच्चों के लिए शिक्षक को क्या करना चाहिए? / सभी को समान अनुभव देने का प्रयास करना / विविधता को सीखने का संसाधन बनाना / बच्चों को अलग-अलग बैठाना / केवल एक समूह पर ध्यान देना / 2
+
+बाल-केंद्रित शिक्षण में पाठ की योजना बनाते समय किसे प्राथमिकता देनी चाहिए? / शिक्षक की सुविधा / विद्यार्थियों की आवश्यकताएँ और रुचियाँ / केवल पाठ्यपुस्तक / केवल परीक्षा / 4
+
+यदि बच्चा किसी प्रश्न का अलग उत्तर देता है, तो शिक्षक को क्या करना चाहिए? / तुरंत गलत घोषित करना / उत्तर को अनदेखा करना / उसके तर्क को समझना / उसे दंड देना / 3
+
+रचनावादी शिक्षण में शिक्षक विद्यार्थियों को क्या करने के अवसर देता है? / ज्ञान का निर्माण / केवल नकल / केवल रटना / केवल मौखिक उत्तर / 1
+
+बच्चों की सीखने की गति अलग-अलग होने पर शिक्षक को क्या करना चाहिए? / सभी को समान समय देना / अतिरिक्त सहायता और उपयुक्त अवसर देना / कमजोर बच्चों को हटाना / तेज बच्चों को रोकना / 2
+
+नैतिक दुविधाओं पर चर्चा किस प्रकार के विकास को बढ़ावा देती है? / नैतिक तर्क / शारीरिक विकास / केवल भाषा विकास / केवल स्मरण / 1
+
+कक्षा में सहयोगी वातावरण का क्या लाभ है? / विद्यार्थी एक-दूसरे से सीखते हैं / केवल प्रतियोगिता बढ़ती है / केवल शिक्षक सीखता है / केवल परीक्षा आसान होती है / 3
+
+प्रेरणा में लक्ष्य की स्पष्टता क्यों महत्वपूर्ण है? / विद्यार्थी अपने प्रयास की दिशा समझता है / परीक्षा समाप्त हो जाती है / गृहकार्य कम हो जाता है / शिक्षक का कार्य समाप्त हो जाता है / 1
+
+अधिगम में पुनर्बलन का उद्देश्य क्या है? / वांछित व्यवहार को बढ़ावा देना / बच्चे को डराना / केवल दंड देना / सीखने को रोकना / 4
+
+यदि बच्चा किसी अवधारणा को गलत समझ रहा है तो शिक्षक को क्या करना चाहिए? / उसकी पूर्वधारणा जानकर पुनः समझाना / केवल उत्तर बताना / उसे दंड देना / प्रश्न बदल देना / 2
+
+मूल्यांकन में विविध विधियों का उपयोग क्यों किया जाता है? / सीखने के विभिन्न पक्षों को जानने के लिए / केवल अंक बढ़ाने के लिए / केवल समय बचाने के लिए / केवल परीक्षा कठिन बनाने के लिए / 1
+
+आत्म-नियंत्रित अधिगम में विद्यार्थी क्या करता है? / अपने सीखने की योजना और निगरानी करता है / केवल शिक्षक पर निर्भर रहता है / केवल उत्तर याद करता है / केवल परीक्षा देता है / 3
+
+कक्षा में चर्चा के दौरान शिक्षक को क्या करना चाहिए? / केवल स्वयं बोलना / सभी को विचार रखने का अवसर देना / केवल तेज विद्यार्थियों को बोलने देना / चर्चा रोक देना / 2
+
+विशेष आवश्यकता वाले विद्यार्थी के लिए उपयुक्त शिक्षण सामग्री क्यों आवश्यक है? / उसकी सहभागिता बढ़ाने के लिए / उसे अलग रखने के लिए / केवल परीक्षा के लिए / केवल शिक्षक की सुविधा के लिए / 4
+
+रचनात्मकता का प्रमुख लक्षण क्या है? / नए और उपयोगी विचार उत्पन्न करना / केवल उत्तर याद करना / केवल अनुकरण करना / केवल नियम दोहराना / 1
+
+बाल विकास को समझने के लिए शिक्षक को किस बात का ध्यान रखना चाहिए? / बच्चे के सामाजिक और सांस्कृतिक संदर्भ का / केवल अंक का / केवल उम्र का / केवल उपस्थिति का / 3
+
+कक्षा में सहपाठी शिक्षण का क्या लाभ है? / विद्यार्थी एक-दूसरे की सहायता करते हैं / शिक्षक की भूमिका समाप्त हो जाती है / केवल परीक्षा होती है / केवल अनुशासन बढ़ता है / 2
+
+एक विद्यार्थी बार-बार असफल हो रहा है। शिक्षक की पहली प्रतिक्रिया क्या होनी चाहिए? / कठिनाई का कारण पता करना / उसे कमजोर घोषित करना / उसे दंड देना / उसे कक्षा से हटाना / 1
+
+अनुभव आधारित शिक्षण में विद्यार्थी किससे सीखता है? / प्रत्यक्ष अनुभवों से / केवल पुस्तक से / केवल व्याख्यान से / केवल परीक्षा से / 4
+
+मेटाकॉग्निशन का संबंध किससे है? / अपनी सोच और सीखने की प्रक्रिया के बारे में सोचना / केवल स्मरण / केवल शारीरिक विकास / केवल अनुकरण / 2
+
+खुले प्रश्नों का प्रयोग किसलिए किया जाता है? / विद्यार्थियों की सोच को विस्तृत करने के लिए / केवल एक उत्तर रटाने के लिए / केवल परीक्षा जल्दी लेने के लिए / केवल अनुशासन के लिए / 3
+
+शिक्षक की प्रतिक्रिया कैसी होनी चाहिए? / विशिष्ट और सुधार की दिशा बताने वाली / केवल आलोचनात्मक / केवल अंक आधारित / केवल नकारात्मक / 1
+
+कक्षा में खेल आधारित गतिविधियाँ किसमें सहायक हो सकती हैं? / सक्रिय और अर्थपूर्ण अधिगम में / केवल मनोरंजन में / केवल अनुशासन में / केवल परीक्षा में / 4
+
+बच्चों के व्यवहार को समझने के लिए शिक्षक को क्या देखना चाहिए? / व्यवहार के पीछे के संदर्भ और कारण / केवल बाहरी व्यवहार / केवल अंक / केवल उपस्थिति / 2
+
+सफल अधिगम का एक महत्वपूर्ण संकेत क्या है? / विद्यार्थी सीखी अवधारणा को नई परिस्थिति में लागू कर सके / विद्यार्थी केवल परिभाषा याद करे / विद्यार्थी केवल परीक्षा दे / विद्यार्थी केवल नोट्स लिखे / 3
+
+
+**भाषा-I हिंदी — 30 प्रश्न**
+
+भाषा अर्जन और भाषा अधिगम में मुख्य अंतर क्या है? / अर्जन अधिक स्वाभाविक प्रक्रिया हो सकता है, जबकि अधिगम में औपचारिक शिक्षण शामिल हो सकता है / दोनों बिल्कुल समान हैं / अर्जन केवल विद्यालय में होता है / अधिगम केवल घर में होता है / 1
+
+पठन के दौरान संदर्भ से कठिन शब्द का अर्थ अनुमान लगाना किस कौशल का संकेत है? / संदर्भात्मक समझ / केवल सुलेख / केवल उच्चारण / केवल वर्तनी / 3
+
+भाषा शिक्षण में मौखिक गतिविधियों को शामिल करने का उद्देश्य क्या है? / संप्रेषण क्षमता विकसित करना / केवल समय बिताना / केवल लिखावट सुधारना / केवल परीक्षा लेना / 2
+
+बच्चों को अपनी मातृभाषा में विचार व्यक्त करने का अवसर देने से क्या लाभ हो सकता है? / विचार अभिव्यक्ति में सहायता मिलती है / भाषा सीखना बंद हो जाता है / केवल वर्तनी सुधरती है / केवल परीक्षा आसान होती है / 4
+
+कहानी के पात्रों पर चर्चा करवाने से क्या विकसित होता है? / समझ और विचार व्यक्त करने की क्षमता / केवल लिखावट / केवल वर्तनी / केवल उच्चारण / 1
+
+भाषा कक्षा में श्रुतलेख का एक प्रमुख उद्देश्य क्या है? / सुनकर लिखने और वर्तनी का अभ्यास / केवल साहित्य समझना / केवल बोलना / केवल पठन गति / 3
+
+किस गतिविधि से बच्चों की कल्पनाशक्ति सबसे अधिक विकसित हो सकती है? / कहानी का नया अंत लिखना / शब्दों की नकल करना / परिभाषा रटना / पाठ की नकल करना / 1
+
+भाषा सीखने में संवादात्मक गतिविधियाँ क्यों महत्वपूर्ण हैं? / भाषा के वास्तविक प्रयोग का अवसर देती हैं / केवल परीक्षा के लिए / केवल व्याकरण के लिए / केवल लिखावट के लिए / 2
+
+व्याकरण की अवधारणा समझाने के लिए उदाहरण पहले देने का क्या लाभ है? / विद्यार्थी नियम को संदर्भ से समझ सकते हैं / पाठ छोटा हो जाता है / केवल अंक बढ़ते हैं / केवल लिखावट सुधरती है / 4
+
+किस प्रकार का पठन विद्यार्थी को पाठ की गहराई से व्याख्या करने के लिए प्रेरित करता है? / आलोचनात्मक पठन / केवल यांत्रिक पठन / केवल मौखिक पठन / केवल सामूहिक पठन / 1
+
+भाषा सीखने में शब्दों की पुनरावृत्ति कब अधिक प्रभावी होती है? / जब शब्दों का अर्थपूर्ण संदर्भ में प्रयोग हो / जब शब्द बिना अर्थ के रटाए जाएँ / केवल परीक्षा से पहले / केवल गृहकार्य में / 3
+
+कक्षा में कविता को अभिनय के साथ प्रस्तुत करने से क्या लाभ हो सकता है? / अभिव्यक्ति और भाव-बोध बढ़ता है / केवल वर्तनी सुधरती है / केवल सुलेख होता है / केवल व्याकरण सीखा जाता है / 2
+
+भाषा मूल्यांकन में मौखिक प्रस्तुति शामिल करने का उद्देश्य क्या है? / बोलने और अभिव्यक्ति कौशल का आकलन / केवल लिखावट जाँचना / केवल वर्तनी जाँचना / केवल पठन गति जाँचना / 1
+
+किस प्रकार की प्रतिक्रिया लेखन में सबसे अधिक उपयोगी होती है? / स्पष्ट और सुधार-उन्मुख प्रतिक्रिया / केवल 'गलत' लिखना / केवल अंक देना / कोई प्रतिक्रिया न देना / 4
+
+बच्चों को नियमित रूप से पुस्तक पढ़ने देने से क्या विकसित हो सकता है? / पठन आदत और शब्द-भंडार / केवल लिखावट / केवल गणितीय क्षमता / केवल अनुशासन / 2
+
+भाषा कक्षा में स्थानीय बोली को स्वीकार करने का क्या लाभ है? / बच्चों की भाषाई पहचान और सहभागिता का सम्मान / केवल परीक्षा आसान करना / मानक भाषा समाप्त करना / केवल समय बचाना / 1
+
+चित्र-वर्णन गतिविधि मुख्यतः किसे विकसित करती है? / मौखिक और वर्णनात्मक अभिव्यक्ति / केवल वर्तनी / केवल सुलेख / केवल व्याकरण / 3
+
+किस गतिविधि में विद्यार्थी भाषा का वास्तविक जीवन में प्रयोग करता है? / आवेदन-पत्र लिखना / केवल शब्द सूची याद करना / केवल परिभाषाएँ लिखना / केवल पाठ नकल करना / 1
+
+भाषा में सुनने की क्षमता विकसित करने के लिए शिक्षक को क्या करना चाहिए? / विभिन्न प्रकार की मौखिक सामग्री सुनवाना / केवल लिखित पाठ देना / केवल व्याकरण पढ़ाना / केवल शब्द रटाना / 4
+
+पठन में पूर्वानुमान लगाने से क्या लाभ होता है? / विद्यार्थी पाठ से सक्रिय रूप से जुड़ता है / केवल उच्चारण सुधरता है / केवल लिखावट सुधरती है / केवल शब्द याद होते हैं / 2
+
+भाषा शिक्षण में समूह कार्य का लाभ क्या है? / संप्रेषण और सहयोग बढ़ता है / केवल शोर बढ़ता है / केवल परीक्षा होती है / केवल लिखावट सुधरती है / 3
+
+बच्चों को अपने प्रश्न बनाने के लिए प्रोत्साहित करना किसका संकेत है? / सक्रिय भाषा अधिगम / केवल अनुशासन / केवल रटना / केवल परीक्षा / 1
+
+शब्दकोश का उपयोग सिखाने से क्या विकसित होता है? / स्वतंत्र शब्द-अन्वेषण की क्षमता / केवल सुलेख / केवल पठन गति / केवल वर्तनी / 4
+
+भाषा की कक्षा में समाचार-पत्र क्यों उपयोगी हो सकता है? / वास्तविक भाषा और समकालीन विषयों से परिचय के लिए / केवल मनोरंजन के लिए / केवल विज्ञापन के लिए / केवल परीक्षा के लिए / 2
+
+लेखन से पहले विचारों का मानचित्र बनाना किसमें सहायता करता है? / लेखन को व्यवस्थित करने में / केवल वर्तनी में / केवल उच्चारण में / केवल पठन में / 3
+
+भाषा की पाठ्यपुस्तक को शिक्षक को कैसे उपयोग करना चाहिए? / एक संसाधन के रूप में, न कि एकमात्र संसाधन के रूप में / केवल अंतिम सत्य के रूप में / केवल परीक्षा के लिए / केवल गृहकार्य के लिए / 1
+
+कहानी पढ़ने के बाद वैकल्पिक शीर्षक बनवाने से क्या विकसित होता है? / समझ और रचनात्मक सोच / केवल सुलेख / केवल उच्चारण / केवल वर्तनी / 4
+
+भाषा कक्षा में प्रश्नोत्तर के बजाय चर्चा कराने का लाभ क्या है? / विद्यार्थियों को विस्तृत रूप से विचार व्यक्त करने का अवसर मिलता है / केवल समय बचता है / केवल शिक्षक बोलता है / केवल परीक्षा होती है / 2
+
+किस गतिविधि से पर्यायवाची शब्दों की समझ बेहतर हो सकती है? / संदर्भ में पर्यायवाची शब्दों का प्रयोग / केवल सूची याद करना / केवल नकल / केवल परीक्षा / 3
+
+भाषा शिक्षण में निरंतर आकलन का लाभ क्या है? / शिक्षक सीखने की प्रगति के अनुसार शिक्षण बदल सकता है / केवल अंतिम अंक मिलते हैं / केवल परीक्षा कम होती है / केवल गृहकार्य बढ़ता है / 1
+
+
+**भाषा-II अंग्रेजी — 30 प्रश्न**
+
+Which activity is most useful for developing oral fluency? / Pair discussion / Copying sentences / Silent reading / Memorizing rules / 1
+
+What is the main purpose of reading comprehension? / Understanding the meaning of a text / Counting words / Copying sentences / Learning punctuation only / 4
+
+Which activity develops inferential comprehension? / Asking students to justify what may happen next / Asking them to copy the answer / Asking only spellings / Asking them to count lines / 1
+
+In a communicative classroom, the teacher mainly acts as a / Facilitator / Dictator / Examiner only / Silent reader / 2
+
+Which task is closest to real-life language use? / Writing a shopping list / Memorizing irregular verbs / Copying a paragraph / Repeating isolated words / 3
+
+Context clues help learners to / Guess the meaning of unfamiliar words / Memorize grammar rules / Improve handwriting / Avoid reading / 1
+
+Which activity best develops listening comprehension? / Listening to an announcement and identifying key information / Copying the announcement / Reading it silently / Writing a long essay / 4
+
+Why is pair work useful in language learning? / It provides more opportunities to communicate / It stops interaction / It reduces speaking / It only tests memory / 2
+
+Which activity promotes creative use of English? / Creating a short dialogue / Copying a dialogue / Memorizing a paragraph / Underlining nouns / 3
+
+A good language assessment should include / Different language skills and tasks / Only grammar / Only spelling / Only handwriting / 1
+
+Which activity develops scanning skills? / Finding a train time in a timetable / Reading every sentence deeply / Writing a story / Memorizing vocabulary / 1
+
+Which activity supports skimming? / Reading quickly to identify the main idea / Looking for one phone number / Copying the title / Learning spellings / 4
+
+Why should learners sometimes use their home language in class? / It can support understanding and learning / It prevents learning / It replaces English completely / It is useful only in exams / 2
+
+Which task develops writing organization? / Making an outline before writing / Copying a model answer / Memorizing words / Reading aloud only / 3
+
+What is formative assessment used for? / Improving learning during instruction / Giving only final grades / Selecting students for admission / Issuing certificates / 1
+
+Which activity encourages vocabulary development? / Using new words in sentences / Memorizing isolated lists only / Avoiding unfamiliar words / Copying the dictionary / 4
+
+A learner-centred classroom encourages students to / Participate actively / Remain silent / Depend completely on the teacher / Memorize every sentence / 2
+
+Which activity is useful for pronunciation practice? / Listening and repeating meaningful expressions / Copying words / Silent reading / Writing definitions / 3
+
+Why are authentic materials useful in language teaching? / They expose learners to language used in real contexts / They eliminate communication / They teach only grammar / They reduce vocabulary / 1
+
+Which question promotes higher-order thinking? / Why do you think the character acted this way? / What is the character's name? / How many lines are there? / What is the first word? / 1
+
+A portfolio is useful because it / Shows learning progress over time / Gives only one final mark / Measures attendance only / Replaces all teaching / 4
+
+Which activity best develops speaking confidence? / Short presentations in small groups / Silent copying / Individual grammar drills only / Memorizing a dictionary / 2
+
+Teaching grammar through examples first can help students / Discover how language works / Avoid communication / Stop asking questions / Memorize without understanding / 3
+
+Which activity develops listening for specific information? / Listening for a name, date or number / Listening without a purpose / Copying a passage / Reading a story silently / 1
+
+Peer feedback can help learners / Notice strengths and areas for improvement / Avoid writing / Stop communicating / Memorize grammar only / 4
+
+Which activity develops reading prediction? / Guessing what the next paragraph may contain / Copying the paragraph / Counting words / Memorizing spellings / 2
+
+Why should a teacher not correct every speaking error immediately? / Too much correction can interrupt communication / Errors never matter / Speaking is unnecessary / Grammar should not be taught / 3
+
+Which activity develops integrated language skills? / Planning and presenting a group project / Copying ten sentences / Memorizing rules / Silent dictionary work / 1
+
+A meaningful writing task should / Have a clear purpose and audience / Require only copying / Have no context / Test spelling alone / 4
+
+Which classroom practice supports inclusion? / Providing different ways for learners to participate / Giving identical support to everyone / Ignoring learner differences / Excluding slower learners / 2
+
+
+**गणित एवं विज्ञान — 30 प्रश्न**
+
+यदि 7/8 में से 3/8 घटाया जाए तो परिणाम क्या होगा? / 1/2 / 3/8 / 4/8 / 5/8 / 1
+
+एक संख्या का 30% 45 है। संख्या क्या है? / 120 / 135 / 150 / 180 / 3
+
+18 और 24 का लघुत्तम समापवर्त्य क्या है? / 36 / 48 / 72 / 96 / 3
+
+एक आयत की लंबाई 15 सेमी और चौड़ाई 6 सेमी है। उसका परिमाप कितना है? / 42 सेमी / 36 सेमी / 90 सेमी / 21 सेमी / 1
+
+यदि x - 9 = 14 है, तो x का मान क्या है? / 5 / 23 / 19 / 25 / 2
+
+2/3 और 3/5 में बड़ी भिन्न कौन-सी है? / 2/3 / 3/5 / दोनों बराबर / निर्धारित नहीं किया जा सकता / 1
+
+एक वर्ग का क्षेत्रफल 64 वर्ग सेमी है। उसकी भुजा कितनी होगी? / 6 सेमी / 7 सेमी / 8 सेमी / 9 सेमी / 3
+
+यदि 5 पेन की कीमत 60 रुपये है, तो एक पेन की कीमत क्या होगी? / 10 रुपये / 12 रुपये / 15 रुपये / 20 रुपये / 2
+
+गणित में बच्चों से अपने समाधान की व्याख्या करवाने का उद्देश्य क्या है? / उनकी गणितीय सोच समझना / केवल लिखावट जाँचना / केवल उत्तर देखना / केवल समय बचाना / 1
+
+यदि किसी संख्या का 1/4 = 18 है, तो संख्या क्या है? / 54 / 64 / 72 / 80 / 3
+
+एक वृत्त का व्यास 14 सेमी है। उसकी त्रिज्या कितनी होगी? / 14 सेमी / 7 सेमी / 28 सेमी / 3.5 सेमी / 2
+
+गणित में पैटर्न खोजने की गतिविधि किस क्षमता को विकसित करती है? / तर्क और सामान्यीकरण / केवल स्मरण / केवल लिखावट / केवल गणना गति / 1
+
+3.6 × 10 का मान क्या है? / 0.36 / 3.06 / 36 / 360 / 3
+
+किसी वस्तु का मूल्य 1000 रुपये है। 15% छूट के बाद कीमत कितनी होगी? / 850 रुपये / 875 रुपये / 900 रुपये / 950 रुपये / 1
+
+गणित में अनुमान आधारित प्रश्नों का क्या लाभ है? / विद्यार्थी उत्तर की युक्तिसंगतता पर विचार करते हैं / केवल उत्तर याद होता है / केवल गति बढ़ती है / केवल सूत्र सीखा जाता है / 4
+
+यदि दो संख्याओं का अनुपात 2:3 है और पहली संख्या 18 है, तो दूसरी संख्या क्या होगी? / 24 / 27 / 30 / 36 / 2
+
+विज्ञान में अवलोकन का अर्थ क्या है? / घटना को ध्यानपूर्वक देखकर जानकारी दर्ज करना / केवल अनुमान लगाना / केवल निष्कर्ष लिखना / केवल प्रश्न पूछना / 1
+
+पौधों में भोजन का निर्माण मुख्यतः किस अंग में होता है? / जड़ / तना / पत्ती / फूल / 3
+
+मानव शरीर में ऑक्सीजन का आदान-प्रदान मुख्यतः कहाँ होता है? / फेफड़ों में / पेट में / गुर्दों में / हृदय में / 1
+
+विद्युत का अच्छा चालक कौन-सा है? / रबर / तांबा / लकड़ी / प्लास्टिक / 2
+
+ध्वनि की तीव्रता मुख्यतः किससे संबंधित है? / आयाम / आवृत्ति मात्र / तरंगदैर्ध्य मात्र / गति मात्र / 1
+
+जल का वाष्प में बदलना क्या कहलाता है? / संघनन / वाष्पीकरण / जमना / गलना / 2
+
+पौधों में भोजन का परिवहन किस ऊतक द्वारा होता है? / जाइलम / फ्लोएम / रंध्र / जड़ रोम / 2
+
+चुंबक का कौन-सा भाग सबसे अधिक आकर्षण दिखाता है? / ध्रुव / मध्य भाग / पूरी सतह समान रूप से / कोई भाग नहीं / 1
+
+किस प्रक्रिया में जलवाष्प ठंडा होकर जल की बूंदों में बदलती है? / वाष्पीकरण / संघनन / उर्ध्वपातन / गलन / 2
+
+मानव शरीर में रक्त को छानने का प्रमुख कार्य कौन करता है? / फेफड़े / गुर्दे / हृदय / मस्तिष्क / 2
+
+विज्ञान में निष्कर्ष किस आधार पर निकाला जाना चाहिए? / प्रमाण और अवलोकन / केवल अनुमान / केवल राय / केवल पाठ्यपुस्तक / 1
+
+खाद्य श्रृंखला में उत्पादक सामान्यतः कौन होते हैं? / हरे पौधे / शाकाहारी / मांसाहारी / अपघटक / 1
+
+कक्षा में विज्ञान प्रयोग करवाते समय शिक्षक को क्या करना चाहिए? / सुरक्षा और उचित प्रक्रिया पर ध्यान देना / बच्चों को बिना निर्देश छोड़ देना / केवल परिणाम बताना / प्रयोग से बचना / 1
+
+विज्ञान सीखने में बच्चों की गलत धारणाओं को दूर करने का प्रभावी तरीका क्या है? / प्रमाण आधारित गतिविधि और चर्चा / केवल उत्तर रटाना / केवल डाँटना / केवल पाठ पढ़ाना / 1
+
+
+**सामाजिक विज्ञान — 30 प्रश्न**
+
+भारतीय संविधान की प्रस्तावना में 'न्याय' के कितने प्रमुख रूपों का उल्लेख है? / दो / तीन / चार / पाँच / 2
+
+भारत में कानून बनाने की प्रक्रिया में संसद की क्या भूमिका है? / कानूनों पर विचार और उन्हें पारित करना / केवल न्याय करना / केवल चुनाव कराना / केवल प्रशासन चलाना / 1
+
+ग्राम पंचायत का प्रमुख कार्य किससे संबंधित है? / स्थानीय विकास और प्रशासन / विदेश नीति / राष्ट्रीय रक्षा / सर्वोच्च न्याय / 4
+
+भारत में मौलिक कर्तव्य किसमें दिए गए हैं? / संविधान / संसद की नियमावली / चुनाव आयोग के नियम / दंड संहिता / 1
+
+संसदीय लोकतंत्र में विपक्ष की महत्वपूर्ण भूमिका क्या है? / सरकार के कार्यों की समीक्षा और प्रश्न करना / सरकार के सभी निर्णयों का समर्थन करना / न्यायपालिका चलाना / चुनाव कराना / 3
+
+इतिहास में अभिलेख किस प्रकार का स्रोत हो सकते हैं? / प्राथमिक स्रोत / केवल द्वितीयक स्रोत / केवल मौखिक स्रोत / केवल आधुनिक स्रोत / 1
+
+हड़प्पा सभ्यता के नगरों की प्रमुख विशेषताओं में क्या शामिल था? / सुनियोजित जल निकासी व्यवस्था / केवल घुमंतू जीवन / केवल लकड़ी के घर / केवल कृषि का अभाव / 4
+
+मौर्य साम्राज्य के प्रसिद्ध शासक अशोक किस नीति के लिए विशेष रूप से जाने जाते हैं? / धम्म / समुद्री व्यापार / औद्योगिक नीति / आधुनिक लोकतंत्र / 2
+
+भक्ति आंदोलन की प्रमुख विशेषता क्या थी? / व्यक्तिगत भक्ति पर जोर / केवल सैन्य विस्तार / केवल व्यापार / केवल राजकीय सत्ता / 1
+
+1857 के विद्रोह का एक प्रमुख केंद्र कौन-सा था? / मेरठ / चेन्नई / मुंबई / शिलांग / 1
+
+स्वतंत्रता आंदोलन में स्वदेशी का अर्थ क्या था? / देशी वस्तुओं और उत्पादन को प्रोत्साहन / विदेशी वस्तुओं का प्रचार / केवल कृषि करना / केवल कर देना / 4
+
+भारतीय राष्ट्रीय आंदोलन में असहयोग आंदोलन किससे जुड़ा था? / ब्रिटिश संस्थाओं से सहयोग वापस लेना / केवल सशस्त्र संघर्ष / केवल चुनाव लड़ना / केवल औद्योगिक विकास / 3
+
+मानचित्र में प्रतीकों का उपयोग क्यों किया जाता है? / विभिन्न भौगोलिक विशेषताओं को दर्शाने के लिए / केवल सजावट के लिए / केवल दूरी मापने के लिए / केवल दिशा बताने के लिए / 1
+
+अक्षांश रेखाएँ किस दिशा में फैली होती हैं? / पूर्व-पश्चिम / उत्तर-दक्षिण / तिरछी / कोई निश्चित दिशा नहीं / 1
+
+भारत में मानसून का कृषि पर क्या प्रभाव है? / वर्षा आधारित कृषि के लिए महत्वपूर्ण है / कृषि से कोई संबंध नहीं / केवल सर्दियों में प्रभाव डालता है / केवल पर्वतीय क्षेत्रों में प्रभाव डालता है / 1
+
+नवीकरणीय संसाधन का उदाहरण कौन-सा है? / पवन ऊर्जा / कोयला / पेट्रोलियम / प्राकृतिक गैस / 2
+
+मुद्रा का प्रमुख कार्य क्या है? / विनिमय का माध्यम / केवल बचत / केवल कर / केवल उत्पादन / 1
+
+बैंक में जमा धन पर मिलने वाली राशि को सामान्यतः क्या कहा जाता है? / ब्याज / लाभांश / किराया / वेतन / 1
+
+बाजार में वस्तुओं की कीमत किन कारकों से प्रभावित हो सकती है? / माँग और आपूर्ति / केवल मौसम / केवल जनसंख्या / केवल मुद्रा / 1
+
+लोकतंत्र में सार्वभौमिक वयस्क मताधिकार का अर्थ क्या है? / योग्य वयस्क नागरिकों को मतदान का अधिकार / केवल शिक्षित लोगों को वोट / केवल सरकारी कर्मचारियों को वोट / केवल पुरुषों को वोट / 1
+
+भारत में निर्वाचन आयोग का मुख्य कार्य क्या है? / चुनावों का संचालन और पर्यवेक्षण / कानून बनाना / न्याय करना / बजट बनाना / 1
+
+न्यायपालिका की स्वतंत्रता क्यों महत्वपूर्ण है? / निष्पक्ष न्याय सुनिश्चित करने के लिए / केवल सरकार की सहायता के लिए / केवल चुनाव कराने के लिए / केवल कानून बनाने के लिए / 2
+
+सामाजिक विज्ञान में स्रोत-आधारित प्रश्नों का उद्देश्य क्या है? / प्रमाणों का विश्लेषण करना / केवल तिथियाँ याद करना / केवल नाम याद करना / केवल परिभाषा लिखना / 4
+
+स्थानीय बाजार का अध्ययन किस अवधारणा को समझने में सहायक हो सकता है? / उत्पादन और विनिमय / केवल इतिहास / केवल जलवायु / केवल राजनीति / 3
+
+मानचित्र पढ़ने में दिशा और पैमाने की समझ क्यों जरूरी है? / स्थान और दूरी समझने के लिए / केवल रंग पहचानने के लिए / केवल नाम याद करने के लिए / केवल चित्र बनाने के लिए / 1
+
+सामाजिक विज्ञान में परियोजना कार्य का प्रमुख लाभ क्या है? / खोज, विश्लेषण और प्रस्तुति का अवसर / केवल रटना / केवल परीक्षा / केवल नकल / 1
+
+ऐतिहासिक घटनाओं को समझते समय विभिन्न स्रोतों की तुलना क्यों की जाती है? / अलग-अलग प्रमाणों की विश्वसनीयता और दृष्टिकोण समझने के लिए / केवल उत्तर लंबा करने के लिए / केवल तिथि याद करने के लिए / केवल अंक पाने के लिए / 1
+
+भारत में स्थानीय स्वशासन का उद्देश्य क्या है? / स्थानीय लोगों की भागीदारी बढ़ाना / केवल केंद्रीय नियंत्रण बढ़ाना / केवल कर वसूलना / केवल चुनाव रोकना / 1
+
+सामाजिक विज्ञान में बहस का उपयोग किस क्षमता को विकसित कर सकता है? / तर्क और प्रमाण आधारित अभिव्यक्ति / केवल स्मरण / केवल लिखावट / केवल अनुशासन / 1
+
+समाचार और समकालीन घटनाओं को सामाजिक विज्ञान से जोड़ने का लाभ क्या है? / विषय को वास्तविक जीवन से जोड़ना / केवल मनोरंजन करना / केवल परीक्षा कठिन करना / केवल गृहकार्य बढ़ाना / 1
+
+
+
+
+
+
+
+
+
+
+`;
+
+const recordPattern = /([\s\S]*?)\s*\/\s*([^/]*?)\s*\/\s*([^/]*?)\s*\/\s*([^/]*?)\s*\/\s*([^/]*?)\s*\/\s*([1-4])(?=\s|$)/g;
+const quizData = [...quizDataText.trim().matchAll(recordPattern)].map((match, index) => {
+  const fields = match.slice(1).map((field) => field.trim());
+  if (fields.length !== 6) {
+    throw new Error(`Question ${index + 1} must have 6 fields separated by /`);
+  }
+  const correctOption = Number(fields[5]);
+  if (!Number.isInteger(correctOption) || correctOption < 1 || correctOption > 4) {
+    throw new Error(`Question ${index + 1} correct option must be a number from 1 to 4`);
+  }
+  return { q: fields[0], o: fields.slice(1, 5), a: correctOption - 1 };
+});
+
+function formatQuestion(question) {
+  return /[?؟]\s*$/.test(question) ? question : `${question}?`;
+}
+
+/* ================
+   Sequential quiz flow
+   ================ */
+const quizEl = document.getElementById("quiz");
+const startQuizBtn = document.getElementById("startQuizBtn");
+const nextBtn = document.getElementById("nextBtn");
+const submitBtn = document.getElementById("submitBtn");
+const restartBtn = document.getElementById("restartBtn");
+const scoreModal = document.getElementById("scoreModal");
+const scoreTitle = document.getElementById("scoreTitle");
+const scoreDesc = document.getElementById("scoreDesc");
+const showAnswersBtn = document.getElementById("showAnswersBtn");
+let currentQuestionIndex = 0;
+let reviewMode = false;
+let questionTimerId = null;
+const totalTimeSeconds = 3600;
+let timeLeft = totalTimeSeconds;
+let timerStarted = false;
+const userAnswers = new Array(quizData.length).fill(null);
+
+function formatTime(totalSeconds) {
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  return [hours, minutes, seconds].map((value) => String(value).padStart(2, "0")).join(":");
+}
+
+function clearQuestionTimer() {
+  if (questionTimerId) {
+    clearInterval(questionTimerId);
+    questionTimerId = null;
+  }
+}
+
+function startQuestionTimer() {
+  clearQuestionTimer();
+  if (reviewMode) return;
+
+  timerStarted = true;
+  const timerBox = document.getElementById("questionTimer");
+  if (timerBox) {
+    timerBox.textContent = `Time: ${formatTime(timeLeft)}`;
+  }
+
+  questionTimerId = setInterval(() => {
+    timeLeft -= 1;
+    if (timerBox) {
+      timerBox.textContent = `Time: ${formatTime(timeLeft)}`;
+    }
+
+    if (timeLeft <= 0) {
+      clearQuestionTimer();
+      submitQuiz();
+    }
+  }, 1000);
+}
+
+function updateControls() {
+  const isLast = currentQuestionIndex === quizData.length - 1;
+
+  nextBtn.style.display = reviewMode ? (isLast ? "none" : "inline-block") : "inline-block";
+  submitBtn.style.display = "none";
+  restartBtn.style.display = reviewMode ? "inline-block" : "none";
+
+  nextBtn.textContent = isLast && !reviewMode ? "Submit" : "Next";
+}
+
+function showStartScreen() {
+  clearQuestionTimer();
+  timerStarted = false;
+  timeLeft = totalTimeSeconds;
+  reviewMode = false;
+  currentQuestionIndex = 0;
+  quizEl.innerHTML = "";
+  startQuizBtn.style.display = "inline-flex";
+}
+
+function startQuiz() {
+  timeLeft = totalTimeSeconds;
+  timerStarted = true;
+  reviewMode = false;
+  currentQuestionIndex = 0;
+  startQuizBtn.style.display = "none";
+  renderQuestion();
+}
+
+function renderQuestion() {
+  clearQuestionTimer();
+  quizEl.innerHTML = "";
+
+  const currentQuestion = quizData[currentQuestionIndex];
+  const selectedAnswer = userAnswers[currentQuestionIndex];
+  const questionAnswered = selectedAnswer !== null;
+
+  const metaRow = document.createElement("div");
+  metaRow.className = "question-meta";
+
+  const startWrap = document.createElement("div");
+  startWrap.className = "start-quiz-wrap";
+  startWrap.appendChild(startQuizBtn);
+
+  const quizTitle = document.createElement("h1");
+  quizTitle.id = "quizTitle";
+  quizTitle.textContent = "CTET 6-8";
+
+  const counter = document.createElement("div");
+  counter.id = "questionCounter";
+  counter.className = "meta-box";
+  counter.textContent = `Question ${currentQuestionIndex + 1}/${quizData.length}`;
+
+  const timer = document.createElement("div");
+  timer.id = "questionTimer";
+  timer.className = "meta-box";
+  timer.textContent = `Time: ${formatTime(timerStarted ? timeLeft : totalTimeSeconds)}`;
+
+  metaRow.appendChild(counter);
+  metaRow.appendChild(startWrap);
+  metaRow.appendChild(quizTitle);
+  metaRow.appendChild(timer);
+  startQuizBtn.style.display = timerStarted || reviewMode ? "none" : "inline-flex";
+  quizEl.appendChild(metaRow);
+
+  const card = document.createElement("div");
+  card.className = "question";
+
+  const title = document.createElement("p");
+  title.className = "q-title";
+  title.textContent = `${String(currentQuestionIndex + 1).padStart(2, "0")}. ${formatQuestion(currentQuestion.q)}`;
+
+  const opts = document.createElement("div");
+  opts.className = "options";
+
+  currentQuestion.o.forEach((opt, optionIndex) => {
+    const id = `q${currentQuestionIndex}-o${optionIndex}`;
+    const label = document.createElement("label");
+    label.className = "option";
+    label.setAttribute("for", id);
+
+    const input = document.createElement("input");
+    input.type = "radio";
+    input.id = id;
+    input.name = `q${currentQuestionIndex}`;
+    input.value = optionIndex;
+    input.checked = selectedAnswer === optionIndex;
+
+    if (reviewMode || questionAnswered) {
+      input.disabled = true;
+      if (optionIndex === currentQuestion.a) {
+        label.classList.add("correct");
+      }
+      if (selectedAnswer === optionIndex && selectedAnswer !== currentQuestion.a) {
+        label.classList.add("incorrect");
+      }
+    } else {
+      input.addEventListener("change", () => {
+        userAnswers[currentQuestionIndex] = Number(input.value);
+        if (!timerStarted) {
+          timeLeft = totalTimeSeconds;
+          timerStarted = true;
+          startQuestionTimer();
+        }
+        renderQuestion();
+      });
+    }
+
+    const span = document.createElement("span");
+    span.className = "option-text";
+    span.textContent = opt;
+
+    label.appendChild(input);
+    label.appendChild(span);
+    opts.appendChild(label);
+  });
+
+  card.appendChild(title);
+  card.appendChild(opts);
+
+  if (reviewMode || questionAnswered) {
+    const result = document.createElement("div");
+    result.className = "result-message";
+    result.style.display = "none";
+    card.appendChild(result);
+  }
+
+  quizEl.appendChild(card);
+
+  title.style.height = "auto";
+  const lineHeight = parseFloat(getComputedStyle(title).lineHeight);
+  if (title.scrollHeight > lineHeight * 3 + 1) {
+    title.classList.add("dense");
+  }
+  title.style.height = "";
+
+  updateControls();
+
+  if (!reviewMode && timerStarted) {
+    startQuestionTimer();
+  }
+}
+
+function showAnswers() {
+  clearQuestionTimer();
+  timerStarted = false;
+  reviewMode = true;
+  currentQuestionIndex = 0;
+  renderQuestion();
+  scoreModal.style.display = "none";
+}
+
+function submitQuiz() {
+  clearQuestionTimer();
+  timerStarted = false;
+
+  let score = 0;
+  let attempted = 0;
+  quizData.forEach((item, qi) => {
+    if (userAnswers[qi] !== null) {
+      attempted++;
+      if (Number(userAnswers[qi]) === item.a) score++;
+    }
+  });
+
+  scoreTitle.textContent = `आपका स्कोर: ${score}/${quizData.length}`;
+  const incorrect = attempted - score;
+  const notAttempted = quizData.length - attempted;
+  scoreDesc.textContent = `सही उत्तर: ${score} • गलत उत्तर: ${incorrect} • Not Attempted: ${notAttempted}`;
+  scoreModal.style.display = "flex";
+}
+
+nextBtn.addEventListener("click", () => {
+  if (reviewMode) {
+    if (currentQuestionIndex < quizData.length - 1) {
+      currentQuestionIndex += 1;
+      renderQuestion();
+    }
+  } else {
+    if (!timerStarted) {
+      timeLeft = totalTimeSeconds;
+      timerStarted = true;
+    }
+
+    if (currentQuestionIndex < quizData.length - 1) {
+      currentQuestionIndex += 1;
+      renderQuestion();
+    } else {
+      submitQuiz();
+    }
+  }
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+submitBtn.addEventListener("click", submitQuiz);
+
+startQuizBtn.addEventListener("click", startQuiz);
+showAnswersBtn.addEventListener("click", restartQuiz);
+
+function restartQuiz() {
+  clearQuestionTimer();
+  timerStarted = false;
+  timeLeft = totalTimeSeconds;
+  reviewMode = false;
+  currentQuestionIndex = 0;
+  userAnswers.fill(null);
+  scoreModal.style.display = "none";
+  renderQuestion();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+restartBtn.addEventListener("click", restartQuiz);
+
+scoreModal.addEventListener("click", (e) => {
+  if (e.target === scoreModal) scoreModal.style.display = "none";
+});
+
+renderQuestion();
+
+</script>
+</body>
+</html>

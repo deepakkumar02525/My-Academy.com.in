@@ -1,0 +1,973 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+  <title>करेंट अफेयर्स</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@400;600;700;800&display=swap');
+
+    :root{
+      --bg:#dfe9fb;
+      --card:#ffffff;
+      --text:#222;
+      --muted:#6b7280;
+      --accent:#2563eb;
+      --ok:#16a34a;
+      --bad:#dc2626;
+      --border:#e5e7eb;
+      --radius:14px;
+      --space:14px;
+
+      /* Base font sizes (mobile-first) */
+      --fs-body:19px;
+      --fs-label:19px;
+      --fs-h1:27px;
+      --fs-brand:31px; /* ~2pt (≈2.66px) बड़ा than h1 */
+      --fs-btn:19px;
+    }
+    @media (min-width:480px){
+      :root{
+        --fs-body:19px;
+        --fs-label:20px;
+        --fs-h1:29px;
+        --fs-brand:33px;
+        --fs-btn:19px;
+      }
+    }
+    @media (min-width:768px){
+      :root{
+        --fs-body:19px;
+        --fs-label:21px;
+        --fs-h1:31px;
+        --fs-brand:35px;
+        --fs-btn:19px;
+      }
+    }
+
+    *{box-sizing:border-box}
+    html {
+      height: 100%;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    html::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+      display: none;
+    }
+    body{
+      margin:0;
+      padding:8px 14px 24px;
+      min-height:100vh;
+      font-family:"Noto Serif Devanagari","Sanskrit Text","Noto Sans Devanagari","Nirmala UI",Mangal,serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.5;
+      font-size:var(--fs-body);
+      box-sizing:border-box;
+      overflow-x:hidden;
+      overflow-y:auto;
+      scrollbar-width:none;
+      -ms-overflow-style:none;
+      -webkit-text-size-adjust:100%;
+      text-rendering:optimizeLegibility;
+    }
+    body::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+      display: none;
+    }
+    .site-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      max-width:980px;
+      margin:0 auto;
+      position:relative;
+    }
+    .brand{
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      font-weight:800;
+      color:#ef4444; /* red */
+      font-size:var(--fs-brand);
+      letter-spacing:.2px;
+    }
+    .social-links{
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      gap:8px;
+      margin-left:auto;
+    }
+    .social-link{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:38px;
+      height:38px;
+      border-radius:50%;
+      color:#fff;
+      text-decoration:none;
+      transition:transform .15s ease, box-shadow .15s ease;
+    }
+    .social-link:hover{
+      transform:translateY(-1px);
+      box-shadow:0 5px 12px rgba(15,23,42,.2);
+    }
+    .social-link svg{
+      width:21px;
+      height:21px;
+      fill:currentColor;
+    }
+    .youtube-link{ background:#ef4444; }
+    .telegram-link{ background:#0ea5e9; }
+    .whatsapp-link{ background:#22c55e; }
+    .social-link:focus-visible{
+      outline:3px solid rgba(37,99,235,.45);
+      outline-offset:3px;
+    }
+    h1{
+      text-align:center;
+      font-size:var(--fs-h1);
+      margin:12px 0 18px;
+      color:#111827;
+    }
+    #quizTitle{
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      margin:0;
+      font-size:var(--fs-h1);
+      line-height:1.2;
+      white-space:nowrap;
+    }
+
+    .quiz-container{
+      max-width:980px;
+      margin:0 auto;
+      display:grid;
+      gap:6px;
+    }
+    .question{
+      background:linear-gradient(135deg, #f8fbff 0%, #eef6ff 38%, #eaf1ff 100%);
+      border:1px solid rgba(147, 197, 253, 0.65);
+      border-radius:var(--radius);
+      padding:16px;
+      height:410px;
+      overflow:hidden;
+      box-shadow:0 6px 22px rgba(59, 130, 246, 0.12);
+    }
+    .question-meta{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin:0 0 10px;
+      position:relative;
+    }
+    .meta-box{
+      display:inline-flex;
+      align-items:center;
+      min-height:42px;
+      padding:8px 14px;
+      border-radius:10px;
+      background:rgba(255,255,255,0.18);
+      border:1px solid rgba(59, 130, 246, 0.25);
+      color:#1f2937;
+      font-weight:800;
+      font-size:1.05rem;
+      box-shadow:0 2px 10px rgba(59, 130, 246, 0.1);
+      text-align:left;
+      line-height:1.4;
+    }
+    #questionCounter{
+      justify-content:flex-start;
+      min-width:150px;
+    }
+    #questionTimer{
+      justify-content:flex-end;
+      min-width:120px;
+      margin-left:auto;
+    }
+    .q-title{
+      font-weight:800;
+      font-size:1.25rem;
+      line-height:1.7;
+      white-space:pre-line;
+      height:auto;
+      overflow:hidden;
+      margin:0 0 4px;
+      color:#0f172a;
+      text-shadow:none;
+    }
+    .q-title.compact{
+      font-size:1.1rem;
+      line-height:1.55;
+    }
+    .q-title.dense{
+      font-size:1rem;
+      line-height:1.45;
+    }
+    .options{
+      display:flex;
+      flex-direction:column;
+      gap:10px; /* vertical spacing line by line */
+    }
+
+    /* Each option as a separate box */
+    .options label.option{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:12px 14px;
+      border:2px solid rgba(96, 165, 250, 0.5);
+      border-radius:12px;
+      background:linear-gradient(135deg, #ffffff 0%, #edf6ff 100%);
+      cursor:pointer;
+      transition:all .15s ease;
+      font-size:var(--fs-label);
+      user-select:none;
+      color:#0f172a;
+    }
+    .options label.option:hover{
+      border-color:#60a5fa;
+      background:linear-gradient(135deg, #f8fbff 0%, #e0ecff 100%);
+    }
+    .option-text{
+      flex:1;
+      line-height:1.5;
+      color:#0f172a;
+      font-weight:700;
+      text-shadow:none;
+    }
+
+    /* Bigger radio for mobile */
+    .options input[type="radio"]{
+      appearance:none;
+      width:26px;
+      height:26px;
+      min-width:26px;
+      min-height:26px;
+      border:2px solid #9ca3af;
+      border-radius:50%;
+      display:inline-block;
+      position:relative;
+      outline:none;
+      transition:border-color .15s ease, box-shadow .15s ease;
+      background:#fff;
+    }
+    .options input[type="radio"]:checked{
+      border-color:#60a5fa;
+      box-shadow:0 0 0 3px rgba(96,165,250,0.12);
+    }
+    .options input[type="radio"]::after{
+      content:"";
+      position:absolute;
+      inset:5px;
+      border-radius:50%;
+      background:transparent;
+      transition:background .15s ease;
+    }
+    .options input[type="radio"]:checked::after{
+      background:#60a5fa;
+    }
+    .options input[type="radio"]:checked ~ .option-text,
+    .options label.option:has(input:checked) .option-text{
+      color:#0f172a;
+      text-shadow:none;
+    }
+    .options label.option:has(input:checked){
+      background:linear-gradient(135deg, #ffffff 0%, #edf6ff 100%);
+      border-color:#60a5fa;
+      box-shadow:none;
+    }
+
+    /* Correct/Incorrect colors */
+    .option.correct{
+      background:#dcfce7 !important;
+      border-color:var(--ok) !important;
+    }
+    .option.incorrect{
+      background:#fee2e2 !important;
+      border-color:var(--bad) !important;
+    }
+    .result-message{
+      margin-top:12px;
+      padding:10px 12px;
+      border-radius:10px;
+      background:rgba(255,255,255,0.8);
+      border:1px solid rgba(148, 163, 184, 0.4);
+      font-weight:800;
+      line-height:1.5;
+    }
+
+    /* Buttons row (submit + restart) */
+    .actions{
+      position:sticky;
+      bottom:0;
+      left:0; right:0;
+      background:rgba(247,247,251,.85);
+      backdrop-filter: blur(6px);
+      border-top:1px solid var(--border);
+      padding:12px 10px;
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      z-index:5;
+    }
+    .btn{
+      border:0;
+      border-radius:999px;
+      padding:12px 18px;
+      font-weight:700;
+      font-size:var(--fs-btn);
+      cursor:pointer;
+      box-shadow:0 4px 14px rgba(0,0,0,.08);
+      transition:transform .15s ease, box-shadow .15s ease;
+    }
+    .start-quiz-wrap{
+      display:flex;
+      justify-content:flex-start;
+      align-items:center;
+      margin:0;
+    }
+    .start-quiz-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:38px;
+      min-width:116px;
+      padding:8px 11px;
+      border-radius:10px;
+      background:linear-gradient(135deg, #2563eb, #7c3aed);
+      color:#fff;
+      font-size:.8rem;
+      font-weight:800;
+      line-height:1.2;
+      box-shadow:0 8px 18px rgba(37, 99, 235, 0.2);
+      margin-left:0;
+    }
+    .start-quiz-btn:disabled{
+      opacity:0.75;
+      cursor:not-allowed;
+    }
+    .btn:hover{
+      transform:translateY(-1px);
+      box-shadow:0 8px 18px rgba(0,0,0,.12);
+    }
+    .btn-submit{ background:#22c55e; color:#fff; }
+    .btn-final-submit{ background:#7c3aed; color:#fff; }
+    .btn-restart{ background:#ef4444; color:#fff; }
+    #prevBtn,
+    #nextBtn{
+      min-width:150px;
+      font-size:20px;
+      padding:14px 22px;
+      background:linear-gradient(135deg, #2563eb, #7c3aed);
+      color:#fff;
+      box-shadow:none;
+      border:0;
+      outline:none;
+    }
+
+    #prevBtn:hover,
+    #nextBtn:hover{
+      box-shadow:none;
+    }
+
+    /* Score modal */
+    .modal{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.4);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      z-index:50;
+    }
+    .modal .card{
+      background:#fff;
+      border-radius:18px;
+      padding:24px;
+      width:min(520px, 96vw);
+      text-align:center;
+      box-shadow:0 10px 30px rgba(0,0,0,.2);
+    }
+    .score{
+      font-size:28px;
+      font-weight:800;
+      margin:8px 0 2px;
+      color:#111827;
+    }
+    .note{
+      font-size:16px;
+      color:var(--muted);
+      margin-bottom:14px;
+    }
+    .modal .btn{
+      width:100%;
+    }
+    .sr-only{
+      position:absolute!important;
+      height:1px;width:1px;
+      overflow:hidden;clip:rect(1px,1px,1px,1px);
+      white-space:nowrap;border:0;padding:0;margin:-1px;
+    }
+
+    @media (max-width: 480px){
+      body{
+        padding:8px 10px 18px;
+      }
+      .site-header{
+        gap:10px;
+      }
+      .brand{
+        font-size:24px;
+        line-height:1.3;
+      }
+      .social-links{
+        gap:6px;
+      }
+      .social-link{
+        width:34px;
+        height:34px;
+      }
+      .social-link svg{
+        width:18px;
+        height:18px;
+      }
+      h1{
+        font-size:24px;
+        margin-bottom:12px;
+      }
+      .quiz-container{
+        gap:4px;
+      }
+      .question{
+        padding:12px;
+        height:360px;
+      }
+      .question-meta{
+        gap:8px;
+        align-items:center;
+        flex-wrap:wrap;
+      }
+      .meta-box{
+        min-height:36px;
+        padding:7px 10px;
+        font-size:0.9rem;
+      }
+      #questionCounter{
+        min-width:0;
+      }
+      #questionTimer{
+        min-width:90px;
+      }
+      .start-quiz-btn{
+        min-height:34px;
+        min-width:104px;
+        padding:7px 9px;
+        font-size:.76rem;
+      }
+      .q-title{
+        font-size:1.08rem;
+        line-height:1.6;
+        height:auto;
+        margin-bottom:4px;
+        word-break:break-word;
+      }
+      .q-title.dense{
+        font-size:.92rem;
+        line-height:1.4;
+      }
+      .options{
+        gap:8px;
+      }
+      .options label.option{
+        align-items:flex-start;
+        gap:10px;
+        padding:10px 12px;
+      }
+      .option-text{
+        font-size:0.95rem;
+        line-height:1.5;
+        word-break:break-word;
+      }
+      .actions{
+        padding:10px 8px 12px;
+        gap:8px;
+      }
+      .btn{
+        padding:11px 14px;
+        font-size:15px;
+      }
+      #prevBtn,
+      #nextBtn{
+        min-width:110px;
+        padding:12px 14px;
+        font-size:15px;
+      }
+      .modal .card{
+        padding:18px 16px;
+      }
+      .score{
+        font-size:24px;
+      }
+      .note{
+        font-size:14px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="site-header">
+    <div class="brand">My Academy</div>
+    <nav class="social-links" aria-label="Social links">
+      <a class="social-link youtube-link" href="http://www.youtube.com/@CurrentAffirs474" target="_blank" rel="noopener" aria-label="YouTube" title="YouTube">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6-6.3 3.6Z"/></svg>
+      </a>
+      <a class="social-link telegram-link" href="https://t.me/testexamdk" target="_blank" rel="noopener" aria-label="Telegram" title="Telegram">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 2 3 9.5l7.2 2.3L12.5 19l3.4-5.3L22 2Zm-3.2 3.5-6.8 5.2-5.3-1.7 12.1-3.5Z"/></svg>
+      </a>
+      <a class="social-link whatsapp-link" href="https://whatsapp.com/channel/0029Va5aFHK9MF8zXUIKM83k" target="_blank" rel="noopener" aria-label="WhatsApp" title="WhatsApp">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a9.9 9.9 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm0 18.1a8.1 8.1 0 0 1-4.1-1.1l-.3-.2-3.1.8.8-3-.2-.3A8.1 8.1 0 1 1 12 20.1Zm4.4-6.1c-.2-.1-1.3-.6-1.5-.7-.2-.1-.4-.1-.5.1l-.7.9c-.1.1-.3.2-.5.1a6.5 6.5 0 0 1-1.9-1.2 7.2 7.2 0 0 1-1.3-1.6c-.1-.2 0-.3.1-.4l.4-.5c.1-.1.1-.3.2-.4.1-.1 0-.3 0-.4l-.7-1.6c-.2-.4-.4-.4-.5-.4h-.4c-.2 0-.4.1-.6.3a2.4 2.4 0 0 0-.8 1.8c0 1 .7 2 0.8 2.1.1.1 1.4 2.2 3.5 3.1.5.2 1 .4 1.3.5.5.2 1 .1 1.4.1.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.1-1-.1-.1-.2-.1-.4-.2Z"/></svg>
+      </a>
+    </nav>
+  </div>
+  <button class="btn start-quiz-btn" id="startQuizBtn" type="button" style="display:none;">Start Quiz</button>
+
+  <div class="quiz-container" id="quiz" aria-live="polite"></div>
+
+  <div class="actions">
+    <button class="btn btn-submit" id="nextBtn">Next</button>
+    <button class="btn btn-submit" id="submitBtn" style="display:none;">Submit</button>
+    <button class="btn btn-restart" id="restartBtn" style="display:none;">Restart</button>
+  </div>
+
+  <!-- Score Modal -->
+  <div class="modal" id="scoreModal" role="dialog" aria-modal="true" aria-labelledby="scoreTitle" aria-describedby="scoreDesc">
+    <div class="card">
+      <div id="scoreTitle" class="score">आपका स्कोर</div>
+      <div id="scoreDesc" class="note">—</div>
+      <button class="btn btn-submit" id="showAnswersBtn">Restart Quiz</button>
+    </div>
+  </div>
+
+<script>
+/* =========================
+   Q&A DATA
+  Format: Question / Option 1 / Option 2 / Option 3 / Option 4 / Correct option number
+  Questions may be separated by a line break or a blank line. Line breaks inside a question are preserved.
+   Example: भारत की राजधानी क्या है? / मुंबई / दिल्ली / पटना / जयपुर / 2
+   ========================= */
+const quizDataText = `
+सासाराम किस राज्य में है? / बिहार / उत्तर प्रदेश / झारखंड / मध्य प्रदेश / 1
+शेरशाह के बाद उसका साम्राज्य किसके हाथ में गया? / इस्लाम शाह / आदिल शाह / हुमायूँ / अकबर / 1
+अकबर के समय मनसबदारी व्यवस्था किससे संबंधित थी? / सैन्य-प्रशासनिक पद / कृषि / व्यापार / न्याय / 1
+मनसबदारी में ‘जात’ क्या दर्शाता था? / व्यक्तिगत पद/रैंक / घोड़ों की संख्या / वेतन / जागीर / 1
+मनसबदारी में ‘सवार’ किससे संबंधित था? / घुड़सवारों की संख्या / भूमि / वेतन / पद / 1
+अकबर के समय ‘दाग’ प्रणाली किससे संबंधित थी? / घोड़ों की पहचान / सैनिकों की वर्दी / भूमि माप / कर / 1
+‘चेहरा’ प्रणाली किससे संबंधित थी? / सैनिकों का विवरण / घोड़ों की नस्ल / भूमि / कर / 1
+अकबर के राजस्व सुधार में किस अधिकारी की प्रमुख भूमिका थी? / टोडरमल / बैरम खाँ / मान सिंह / बीरबल / 1
+टोडरमल की राजस्व व्यवस्था किस नाम से प्रसिद्ध है? / जब्ती व्यवस्था / इक्ता / जागीर / रैयतवाड़ी / 1
+अकबर के समय भूमि मापने के लिए किस इकाई का प्रयोग हुआ? / इलाही गज / टंका / दाम / बीघा मात्र / 1
+अकबर ने अपना संवत कौन-सा शुरू किया? / इलाही संवत / विक्रम संवत / शक संवत / हिजरी / 1
+अकबर ने इबादतखाना कहाँ बनवाया? / फतेहपुर सीकरी / आगरा / दिल्ली / लाहौर / 1
+इबादतखाना में क्या होता था? / धार्मिक चर्चाएँ / युद्ध प्रशिक्षण / व्यापारिक बैठकें / न्यायालय / 1
+अकबर ने किस वर्ष इबादतखाना की स्थापना की? / 1575 / 1576 / 1582 / 1564 / 1
+अकबर के समय महाभारत का फारसी अनुवाद किस नाम से हुआ? / रज्मनामा / अकबरनामा / पदशाहनामा / तुजुक / 1
+अकबर के समय रामायण का फारसी अनुवाद किस परियोजना का हिस्सा था? / अनुवाद विभाग / राजस्व विभाग / सैन्य विभाग / न्याय विभाग / 1
+अबुल फजल का भाई कौन था? / फैजी / बीरबल / टोडरमल / मान सिंह / 1
+फैजी किस क्षेत्र में प्रसिद्ध थे? / फारसी साहित्य / युद्ध / राजस्व / स्थापत्य / 1
+बीरबल का वास्तविक नाम क्या था? / महेश दास / हरिदास / राजदास / वीर सिंह / 1
+अकबर के दरबार में तानसेन किस क्षेत्र से जुड़े थे? / संगीत / चित्रकला / युद्ध / राजस्व / 1
+तानसेन का मूल नाम क्या माना जाता है? / रामतनु पांडे / महेश दास / हरिदास / सूरदास / 1
+अब्दुर्रहीम खानखाना किस क्षेत्र में प्रसिद्ध थे? / साहित्य और सैन्य सेवा / केवल चित्रकला / केवल चिकित्सा / केवल वास्तुकला / 1
+अकबर के नवरत्नों में कौन खगोलज्ञ/गणितज्ञ नहीं था? / टोडरमल / तानसेन / बीरबल / अबुल फजल / 1
+अकबर ने राजपूत नीति में क्या अपनाया? / वैवाहिक और राजनीतिक गठबंधन / पूर्ण बहिष्कार / केवल युद्ध / कर वृद्धि / 1
+अकबर ने किस राजपूत राज्य से वैवाहिक संबंध स्थापित किए? / आमेर / मेवाड़ / मारवाड़ मात्र / बूंदी मात्र / 1
+आमेर के राजा भारमल की पुत्री का विवाह किससे हुआ? / अकबर / जहांगीर / शाहजहाँ / हुमायूँ / 1
+अकबर ने गुजरात पर विजय कब प्राप्त की? / 1572-73 / 1565 / 1580 / 1590 / 1
+अकबर के साम्राज्य में गुजरात का महत्व क्यों था? / समुद्री व्यापार / लौह खनन / हिमालयी मार्ग / चाय उत्पादन / 1
+अकबर ने बंगाल और बिहार पर अधिकार किस शताब्दी में मजबूत किया? / 16वीं / 15वीं / 17वीं / 18वीं / 1
+अकबर के समय कश्मीर पर मुगल अधिकार कब हुआ? / 1586 / 1576 / 1599 / 1605 / 1
+अकबर ने सिंध पर कब अधिकार किया? / 1591 / 1586 / 1600 / 1572 / 1
+अकबर के शासन में दक्कन नीति का उद्देश्य क्या था? / दक्षिणी राज्यों पर प्रभाव / यूरोप विजय / समुद्री व्यापार बंद करना / कश्मीर विजय / 1
+जहांगीर के शासन में कौन-सी कला विशेष रूप से विकसित हुई? / प्राकृतिक चित्रण / केवल वास्तुकला / केवल संगीत / केवल मूर्तिकला / 1
+जहांगीर ने किस चित्रकार को संरक्षण दिया? / उस्ताद मंसूर / बसावन / दसवंत / तानसेन / 1
+उस्ताद मंसूर किस प्रकार के चित्रों के लिए प्रसिद्ध थे? / पशु-पक्षी / युद्ध / वास्तु / धार्मिक ग्रंथ / 1
+जहांगीर के समय अंग्रेजों को व्यापारिक सुविधाएँ किस क्षेत्र में मिलीं? / सूरत / दिल्ली / पटना / अजमेर / 1
+अंग्रेजी ईस्ट इंडिया कंपनी को भारत में व्यापार की अनुमति किस मुगल शासक के समय बढ़ी? / जहांगीर / बाबर / अकबर / औरंगजेब / 1
+सर थॉमस रो किस कंपनी का प्रतिनिधि था? / अंग्रेजी ईस्ट इंडिया कंपनी / डच कंपनी / फ्रांसीसी कंपनी / पुर्तगाली कंपनी / 1
+शाहजहाँ के समय मुगल वास्तुकला की प्रमुख विशेषता क्या थी? / संगमरमर का व्यापक प्रयोग / लकड़ी के भवन / मिट्टी के किले / गुफाएँ / 1
+ताजमहल का निर्माण लगभग कितने वर्षों में पूरा हुआ? / लगभग 22 वर्ष / 5 वर्ष / 10 वर्ष / 40 वर्ष / 1
+ताजमहल के वास्तुकार के रूप में किसका नाम लोकप्रिय रूप से लिया जाता है? / उस्ताद अहमद लाहौरी / अबुल फजल / टोडरमल / मीर जुमला / 1
+दिल्ली की जामा मस्जिद किस शैली का उदाहरण है? / मुगल वास्तुकला / द्रविड़ / नागर / वेसर / 1
+शाहजहाँनाबाद का वर्तमान नाम क्या है? / पुरानी दिल्ली / नई दिल्ली / आगरा / फतेहपुर सीकरी / 1
+औरंगजेब के समय किस मुगल संगीतकार की कथा प्रसिद्ध है? / दरबारी संगीत पर प्रतिबंध से जुड़ी कथाएँ / तानसेन / बैजू बावरा / स्वामी हरिदास / 1
+औरंगजेब ने कौन-सी उपाधि धारण की? / आलमगीर / जफर / विक्रमादित्य / गाजी / 1
+औरंगजेब के शासनकाल में कौन-सा मराठा नेता प्रमुख हुआ? / शिवाजी / बाजीराव / शाहू / माधवराव / 1
+शिवाजी और औरंगजेब के बीच आगरा की घटना कब हुई? / 1666 / 1674 / 1680 / 1658 / 1
+शिवाजी आगरा में किसके दरबार में गए थे? / औरंगजेब / शाहजहाँ / जहांगीर / अकबर / 1
+शिवाजी आगरा से कैसे निकले? / चतुराई से निगरानी से बचकर / युद्ध करके / नाव से / सुरंग से / 1
+शिवाजी के प्रशासन में ‘पेशवा’ का पद क्या था? / प्रधान मंत्री / सेनापति / न्यायाधीश / राजदूत / 1
+शिवाजी के ‘अमात्य’ का कार्य क्या था? / वित्त/लेखा / सेना / विदेश नीति / धर्म / 1
+शिवाजी के ‘सुमंत’ का कार्य किससे संबंधित था? / विदेश मामले / वित्त / सेना / न्याय / 1
+शिवाजी के ‘सेनापति’ का कार्य क्या था? / सेना / न्याय / राजस्व / धर्म / 1
+शिवाजी के ‘न्यायाधीश’ का कार्य क्या था? / न्याय / सेना / विदेश नीति / कर / 1
+शिवाजी के ‘पंडितराव’ का कार्य क्या था? / धार्मिक मामले / सेना / व्यापार / कृषि / 1
+शिवाजी की नौसेना का उद्देश्य क्या था? / समुद्री सुरक्षा / दिल्ली विजय / पंजाब विजय / बंगाल व्यापार / 1
+शिवाजी ने किस प्रकार के किलों को महत्व दिया? / पहाड़ी किले / केवल मैदानी किले / समुद्री बंदरगाह मात्र / गुफाएँ / 1
+शिवाजी के प्रमुख किलों में कौन-सा था? / प्रतापगढ़ / लाल किला / आगरा किला / कुतुबमीनार / 1
+अफजल खाँ और शिवाजी की भेंट कहाँ हुई? / प्रतापगढ़ / रायगढ़ / पुणे / आगरा / 1
+अफजल खाँ किस राज्य का सेनापति था? / बीजापुर / गोलकुंडा / मुगल / अहमदनगर / 1
+शिवाजी ने सूरत पर आक्रमण कब किया? / 1664 / 1658 / 1674 / 1680 / 1
+मराठा राज्य में ‘चौथ’ क्या था? / राजस्व का एक चौथाई / आधा कर / व्यापार कर / भूमि कर मात्र / 1
+‘सरदेशमुखी’ किससे संबंधित थी? / अतिरिक्त राजस्व दावा / सैन्य पद / धार्मिक कर / व्यापार शुल्क / 1
+बालाजी विश्वनाथ किस पद पर थे? / पेशवा / सेनापति / छत्रपति / दीवान / 1
+बालाजी विश्वनाथ ने किस मराठा शासक की शक्ति मजबूत की? / शाहू / संभाजी / राजाराम / शिवाजी / 1
+बाजीराव प्रथम का शासनकाल किस अवधि से संबंधित है? / 18वीं शताब्दी / 17वीं / 16वीं / 19वीं / 1
+बाजीराव प्रथम की राजधानी के रूप में कौन-सा नगर प्रमुख था? / पुणे / दिल्ली / आगरा / सतारा मात्र / 1
+मराठा साम्राज्य में सिंधिया परिवार का प्रमुख केंद्र कहाँ था? / ग्वालियर / इंदौर / बड़ौदा / नागपुर / 1
+होल्कर परिवार का प्रमुख केंद्र कहाँ था? / इंदौर / ग्वालियर / नागपुर / पुणे / 1
+भोंसले परिवार का प्रमुख केंद्र कौन-सा था? / नागपुर / इंदौर / ग्वालियर / दिल्ली / 1
+गायकवाड़ परिवार का प्रमुख केंद्र कहाँ था? / बड़ौदा / पुणे / सतारा / नागपुर / 1
+पानीपत के तीसरे युद्ध में अफगान पक्ष का नेतृत्व किसने किया? / अहमद शाह अब्दाली / नादिरशाह / शुजा-उद-दौला / मीर कासिम / 1
+तीसरे पानीपत युद्ध के बाद मराठा शक्ति को क्या प्रभाव पड़ा? / अस्थायी रूप से कमजोर हुई / पूर्णतः समाप्त / अत्यधिक बढ़ी / कोई प्रभाव नहीं / 1
+माधवराव प्रथम किससे संबंधित थे? / मराठा पेशवा / मुगल शासक / अंग्रेज अधिकारी / सिख नेता / 1
+प्रथम आंग्ल-मराठा युद्ध कब शुरू हुआ? / 1775 / 1761 / 1782 / 1803 / 1
+प्रथम आंग्ल-मराठा युद्ध का अंत किस संधि से हुआ? / सालबाई की संधि / बेसिन की संधि / सुगौली संधि / इलाहाबाद संधि / 1
+सालबाई की संधि कब हुई? / 1782 / 1775 / 1802 / 1818 / 1
+बेसिन की संधि कब हुई? / 1802 / 1782 / 1799 / 1818 / 1
+बेसिन की संधि किस मराठा पेशवा से संबंधित थी? / बाजीराव द्वितीय / माधवराव / बाजीराव प्रथम / बालाजी विश्वनाथ / 1
+तृतीय आंग्ल-मराठा युद्ध कब हुआ? / 1817-18 / 1802 / 1782 / 1799 / 1
+मराठा शक्ति का अंतिम पतन किस युद्ध के बाद हुआ? / तृतीय आंग्ल-मराठा युद्ध / प्रथम पानीपत / प्लासी / बक्सर / 1
+मैसूर का प्रसिद्ध शासक कौन था? / हैदर अली / टीपू सुल्तान / कृष्णदेवराय / निजाम / 1
+टीपू सुल्तान के पिता कौन थे? / हैदर अली / निजाम / मीर जाफर / शेरशाह / 1
+टीपू सुल्तान की राजधानी क्या थी? / श्रीरंगपट्टनम / मैसूर / बेंगलुरु / मदुरै / 1
+टीपू सुल्तान किस उपाधि से प्रसिद्ध था? / मैसूर का शेर / पंजाब केसरी / लोकमान्य / लौह पुरुष / 1
+टीपू सुल्तान ने किस तकनीक के सैन्य उपयोग को बढ़ावा दिया? / रॉकेट / टैंक / मशीनगन / पनडुब्बी / 1
+टीपू सुल्तान की मृत्यु कब हुई? / 1799 / 1782 / 1805 / 1818 / 1
+टीपू सुल्तान की मृत्यु किस युद्ध में हुई? / चतुर्थ आंग्ल-मैसूर युद्ध / प्लासी / बक्सर / प्रथम मराठा युद्ध / 1
+प्रथम आंग्ल-मैसूर युद्ध कब हुआ? / 1767-69 / 1780-84 / 1790-92 / 1799 / 1
+द्वितीय आंग्ल-मैसूर युद्ध कब हुआ? / 1780-84 / 1767-69 / 1790-92 / 1799 / 1
+तृतीय आंग्ल-मैसूर युद्ध कब हुआ? / 1790-92 / 1780-84 / 1767-69 / 1799 / 1
+चतुर्थ आंग्ल-मैसूर युद्ध कब हुआ? / 1799 / 1792 / 1784 / 1769 / 1
+टीपू सुल्तान किस यूरोपीय शक्ति से अंग्रेजों के विरुद्ध सहायता चाहता था? / फ्रांस / पुर्तगाल / स्पेन / रूस मात्र / 1
+हैदर अली ने किस क्षेत्र में अंग्रेजों को चुनौती दी? / दक्षिण भारत / पंजाब / बंगाल / राजस्थान / 1
+कर्नाटक युद्ध किन यूरोपीय शक्तियों के बीच भारत में प्रतिस्पर्धा से जुड़े थे? / अंग्रेज और फ्रांसीसी / अंग्रेज और पुर्तगाली / फ्रांसीसी और डच / डच और पुर्तगाली / 1
+प्रथम कर्नाटक युद्ध कब हुआ? / 1746-48 / 1756-63 / 1760-61 / 1740-42 / 1
+द्वितीय कर्नाटक युद्ध कब हुआ? / 1749-54 / 1746-48 / 1756-63 / 1761 / 1
+तृतीय कर्नाटक युद्ध कब हुआ? / 1756-63 / 1746-48 / 1749-54 / 1764-65 / 1
+कर्नाटक युद्धों का परिणाम किसके पक्ष में रहा? / अंग्रेज / फ्रांसीसी / डच / पुर्तगाली / 1
+फ्रांसीसी भारत में अपना प्रमुख राजनीतिक प्रभाव किस युद्ध के बाद खो बैठे? / तृतीय कर्नाटक युद्ध / प्लासी / बक्सर / मैसूर युद्ध / 1
+
+
+
+
+
+`;
+
+const recordPattern = /([\s\S]*?)\s*\/\s*([^/]*?)\s*\/\s*([^/]*?)\s*\/\s*([^/]*?)\s*\/\s*([^/]*?)\s*\/\s*([1-4])(?=\s|$)/g;
+const quizData = [...quizDataText.trim().matchAll(recordPattern)].map((match, index) => {
+  const fields = match.slice(1).map((field) => field.trim());
+  if (fields.length !== 6) {
+    throw new Error(`Question ${index + 1} must have 6 fields separated by /`);
+  }
+  const correctOption = Number(fields[5]);
+  if (!Number.isInteger(correctOption) || correctOption < 1 || correctOption > 4) {
+    throw new Error(`Question ${index + 1} correct option must be a number from 1 to 4`);
+  }
+  return { q: fields[0], o: fields.slice(1, 5), a: correctOption - 1 };
+});
+
+function formatQuestion(question) {
+  return /[?؟]\s*$/.test(question) ? question : `${question}?`;
+}
+
+/* ================
+   Sequential quiz flow
+   ================ */
+const quizEl = document.getElementById("quiz");
+const startQuizBtn = document.getElementById("startQuizBtn");
+const nextBtn = document.getElementById("nextBtn");
+const submitBtn = document.getElementById("submitBtn");
+const restartBtn = document.getElementById("restartBtn");
+const scoreModal = document.getElementById("scoreModal");
+const scoreTitle = document.getElementById("scoreTitle");
+const scoreDesc = document.getElementById("scoreDesc");
+const showAnswersBtn = document.getElementById("showAnswersBtn");
+let currentQuestionIndex = 0;
+let reviewMode = false;
+let questionTimerId = null;
+const totalTimeSeconds = 3600;
+let timeLeft = totalTimeSeconds;
+let timerStarted = false;
+const userAnswers = new Array(quizData.length).fill(null);
+
+function formatTime(totalSeconds) {
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  return [hours, minutes, seconds].map((value) => String(value).padStart(2, "0")).join(":");
+}
+
+function clearQuestionTimer() {
+  if (questionTimerId) {
+    clearInterval(questionTimerId);
+    questionTimerId = null;
+  }
+}
+
+function startQuestionTimer() {
+  clearQuestionTimer();
+  if (reviewMode) return;
+
+  timerStarted = true;
+  const timerBox = document.getElementById("questionTimer");
+  if (timerBox) {
+    timerBox.textContent = `Time: ${formatTime(timeLeft)}`;
+  }
+
+  questionTimerId = setInterval(() => {
+    timeLeft -= 1;
+    if (timerBox) {
+      timerBox.textContent = `Time: ${formatTime(timeLeft)}`;
+    }
+
+    if (timeLeft <= 0) {
+      clearQuestionTimer();
+      submitQuiz();
+    }
+  }, 1000);
+}
+
+function updateControls() {
+  const isLast = currentQuestionIndex === quizData.length - 1;
+
+  nextBtn.style.display = reviewMode ? (isLast ? "none" : "inline-block") : "inline-block";
+  submitBtn.style.display = "none";
+  restartBtn.style.display = reviewMode ? "inline-block" : "none";
+
+  nextBtn.textContent = isLast && !reviewMode ? "Submit" : "Next";
+}
+
+function showStartScreen() {
+  clearQuestionTimer();
+  timerStarted = false;
+  timeLeft = totalTimeSeconds;
+  reviewMode = false;
+  currentQuestionIndex = 0;
+  quizEl.innerHTML = "";
+  startQuizBtn.style.display = "inline-flex";
+}
+
+function startQuiz() {
+  timeLeft = totalTimeSeconds;
+  timerStarted = true;
+  reviewMode = false;
+  currentQuestionIndex = 0;
+  startQuizBtn.style.display = "none";
+  renderQuestion();
+}
+
+function renderQuestion() {
+  clearQuestionTimer();
+  quizEl.innerHTML = "";
+
+  const currentQuestion = quizData[currentQuestionIndex];
+  const selectedAnswer = userAnswers[currentQuestionIndex];
+  const questionAnswered = selectedAnswer !== null;
+
+  const metaRow = document.createElement("div");
+  metaRow.className = "question-meta";
+
+  const startWrap = document.createElement("div");
+  startWrap.className = "start-quiz-wrap";
+  startWrap.appendChild(startQuizBtn);
+
+  const quizTitle = document.createElement("h1");
+  quizTitle.id = "quizTitle";
+  quizTitle.textContent = "100 Gk";
+
+  const counter = document.createElement("div");
+  counter.id = "questionCounter";
+  counter.className = "meta-box";
+  counter.textContent = `Question ${currentQuestionIndex + 1}/${quizData.length}`;
+
+  const timer = document.createElement("div");
+  timer.id = "questionTimer";
+  timer.className = "meta-box";
+  timer.textContent = `Time: ${formatTime(timerStarted ? timeLeft : totalTimeSeconds)}`;
+
+  metaRow.appendChild(counter);
+  metaRow.appendChild(startWrap);
+  metaRow.appendChild(quizTitle);
+  metaRow.appendChild(timer);
+  startQuizBtn.style.display = timerStarted || reviewMode ? "none" : "inline-flex";
+  quizEl.appendChild(metaRow);
+
+  const card = document.createElement("div");
+  card.className = "question";
+
+  const title = document.createElement("p");
+  title.className = "q-title";
+  title.textContent = `${String(currentQuestionIndex + 1).padStart(2, "0")}. ${formatQuestion(currentQuestion.q)}`;
+
+  const opts = document.createElement("div");
+  opts.className = "options";
+
+  currentQuestion.o.forEach((opt, optionIndex) => {
+    const id = `q${currentQuestionIndex}-o${optionIndex}`;
+    const label = document.createElement("label");
+    label.className = "option";
+    label.setAttribute("for", id);
+
+    const input = document.createElement("input");
+    input.type = "radio";
+    input.id = id;
+    input.name = `q${currentQuestionIndex}`;
+    input.value = optionIndex;
+    input.checked = selectedAnswer === optionIndex;
+
+    if (reviewMode || questionAnswered) {
+      input.disabled = true;
+      if (optionIndex === currentQuestion.a) {
+        label.classList.add("correct");
+      }
+      if (selectedAnswer === optionIndex && selectedAnswer !== currentQuestion.a) {
+        label.classList.add("incorrect");
+      }
+    } else {
+      input.addEventListener("change", () => {
+        userAnswers[currentQuestionIndex] = Number(input.value);
+        if (!timerStarted) {
+          timeLeft = totalTimeSeconds;
+          timerStarted = true;
+          startQuestionTimer();
+        }
+        renderQuestion();
+      });
+    }
+
+    const span = document.createElement("span");
+    span.className = "option-text";
+    span.textContent = opt;
+
+    label.appendChild(input);
+    label.appendChild(span);
+    opts.appendChild(label);
+  });
+
+  card.appendChild(title);
+  card.appendChild(opts);
+
+  if (reviewMode || questionAnswered) {
+    const result = document.createElement("div");
+    result.className = "result-message";
+    result.style.display = "none";
+    card.appendChild(result);
+  }
+
+  quizEl.appendChild(card);
+
+  title.style.height = "auto";
+  const lineHeight = parseFloat(getComputedStyle(title).lineHeight);
+  if (title.scrollHeight > lineHeight * 3 + 1) {
+    title.classList.add("dense");
+  }
+  title.style.height = "";
+
+  updateControls();
+
+  if (!reviewMode && timerStarted) {
+    startQuestionTimer();
+  }
+}
+
+function showAnswers() {
+  clearQuestionTimer();
+  timerStarted = false;
+  reviewMode = true;
+  currentQuestionIndex = 0;
+  renderQuestion();
+  scoreModal.style.display = "none";
+}
+
+function submitQuiz() {
+  clearQuestionTimer();
+  timerStarted = false;
+
+  let score = 0;
+  let attempted = 0;
+  quizData.forEach((item, qi) => {
+    if (userAnswers[qi] !== null) {
+      attempted++;
+      if (Number(userAnswers[qi]) === item.a) score++;
+    }
+  });
+
+  scoreTitle.textContent = `आपका स्कोर: ${score}/${quizData.length}`;
+  const incorrect = attempted - score;
+  const notAttempted = quizData.length - attempted;
+  scoreDesc.textContent = `सही उत्तर: ${score} • गलत उत्तर: ${incorrect} • Not Attempted: ${notAttempted}`;
+  scoreModal.style.display = "flex";
+}
+
+nextBtn.addEventListener("click", () => {
+  if (reviewMode) {
+    if (currentQuestionIndex < quizData.length - 1) {
+      currentQuestionIndex += 1;
+      renderQuestion();
+    }
+  } else {
+    if (!timerStarted) {
+      timeLeft = totalTimeSeconds;
+      timerStarted = true;
+    }
+
+    if (currentQuestionIndex < quizData.length - 1) {
+      currentQuestionIndex += 1;
+      renderQuestion();
+    } else {
+      submitQuiz();
+    }
+  }
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+submitBtn.addEventListener("click", submitQuiz);
+
+startQuizBtn.addEventListener("click", startQuiz);
+showAnswersBtn.addEventListener("click", restartQuiz);
+
+function restartQuiz() {
+  clearQuestionTimer();
+  timerStarted = false;
+  timeLeft = totalTimeSeconds;
+  reviewMode = false;
+  currentQuestionIndex = 0;
+  userAnswers.fill(null);
+  scoreModal.style.display = "none";
+  renderQuestion();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+restartBtn.addEventListener("click", restartQuiz);
+
+scoreModal.addEventListener("click", (e) => {
+  if (e.target === scoreModal) scoreModal.style.display = "none";
+});
+
+renderQuestion();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,972 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+  <title>करेंट अफेयर्स</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@400;600;700;800&display=swap');
+
+    :root{
+      --bg:#dfe9fb;
+      --card:#ffffff;
+      --text:#222;
+      --muted:#6b7280;
+      --accent:#2563eb;
+      --ok:#16a34a;
+      --bad:#dc2626;
+      --border:#e5e7eb;
+      --radius:14px;
+      --space:14px;
+
+      /* Base font sizes (mobile-first) */
+      --fs-body:19px;
+      --fs-label:19px;
+      --fs-h1:27px;
+      --fs-brand:31px; /* ~2pt (≈2.66px) बड़ा than h1 */
+      --fs-btn:19px;
+    }
+    @media (min-width:480px){
+      :root{
+        --fs-body:19px;
+        --fs-label:20px;
+        --fs-h1:29px;
+        --fs-brand:33px;
+        --fs-btn:19px;
+      }
+    }
+    @media (min-width:768px){
+      :root{
+        --fs-body:19px;
+        --fs-label:21px;
+        --fs-h1:31px;
+        --fs-brand:35px;
+        --fs-btn:19px;
+      }
+    }
+
+    *{box-sizing:border-box}
+    html {
+      height: 100%;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    html::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+      display: none;
+    }
+    body{
+      margin:0;
+      padding:8px 14px 24px;
+      min-height:100vh;
+      font-family:"Noto Serif Devanagari","Sanskrit Text","Noto Sans Devanagari","Nirmala UI",Mangal,serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.5;
+      font-size:var(--fs-body);
+      box-sizing:border-box;
+      overflow-x:hidden;
+      overflow-y:auto;
+      scrollbar-width:none;
+      -ms-overflow-style:none;
+      -webkit-text-size-adjust:100%;
+      text-rendering:optimizeLegibility;
+    }
+    body::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+      display: none;
+    }
+    .site-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      max-width:980px;
+      margin:0 auto;
+      position:relative;
+    }
+    .brand{
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      font-weight:800;
+      color:#ef4444; /* red */
+      font-size:var(--fs-brand);
+      letter-spacing:.2px;
+    }
+    .social-links{
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      gap:8px;
+      margin-left:auto;
+    }
+    .social-link{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:38px;
+      height:38px;
+      border-radius:50%;
+      color:#fff;
+      text-decoration:none;
+      transition:transform .15s ease, box-shadow .15s ease;
+    }
+    .social-link:hover{
+      transform:translateY(-1px);
+      box-shadow:0 5px 12px rgba(15,23,42,.2);
+    }
+    .social-link svg{
+      width:21px;
+      height:21px;
+      fill:currentColor;
+    }
+    .youtube-link{ background:#ef4444; }
+    .telegram-link{ background:#0ea5e9; }
+    .whatsapp-link{ background:#22c55e; }
+    .social-link:focus-visible{
+      outline:3px solid rgba(37,99,235,.45);
+      outline-offset:3px;
+    }
+    h1{
+      text-align:center;
+      font-size:var(--fs-h1);
+      margin:12px 0 18px;
+      color:#111827;
+    }
+    #quizTitle{
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      margin:0;
+      font-size:var(--fs-h1);
+      line-height:1.2;
+      white-space:nowrap;
+    }
+
+    .quiz-container{
+      max-width:980px;
+      margin:0 auto;
+      display:grid;
+      gap:6px;
+    }
+    .question{
+      background:linear-gradient(135deg, #f8fbff 0%, #eef6ff 38%, #eaf1ff 100%);
+      border:1px solid rgba(147, 197, 253, 0.65);
+      border-radius:var(--radius);
+      padding:16px;
+      height:410px;
+      overflow:hidden;
+      box-shadow:0 6px 22px rgba(59, 130, 246, 0.12);
+    }
+    .question-meta{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin:0 0 10px;
+      position:relative;
+    }
+    .meta-box{
+      display:inline-flex;
+      align-items:center;
+      min-height:42px;
+      padding:8px 14px;
+      border-radius:10px;
+      background:rgba(255,255,255,0.18);
+      border:1px solid rgba(59, 130, 246, 0.25);
+      color:#1f2937;
+      font-weight:800;
+      font-size:1.05rem;
+      box-shadow:0 2px 10px rgba(59, 130, 246, 0.1);
+      text-align:left;
+      line-height:1.4;
+    }
+    #questionCounter{
+      justify-content:flex-start;
+      min-width:150px;
+    }
+    #questionTimer{
+      justify-content:flex-end;
+      min-width:120px;
+      margin-left:auto;
+    }
+    .q-title{
+      font-weight:800;
+      font-size:1.25rem;
+      line-height:1.7;
+      white-space:pre-line;
+      height:auto;
+      overflow:hidden;
+      margin:0 0 4px;
+      color:#0f172a;
+      text-shadow:none;
+    }
+    .q-title.compact{
+      font-size:1.1rem;
+      line-height:1.55;
+    }
+    .q-title.dense{
+      font-size:1rem;
+      line-height:1.45;
+    }
+    .options{
+      display:flex;
+      flex-direction:column;
+      gap:10px; /* vertical spacing line by line */
+    }
+
+    /* Each option as a separate box */
+    .options label.option{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:12px 14px;
+      border:2px solid rgba(96, 165, 250, 0.5);
+      border-radius:12px;
+      background:linear-gradient(135deg, #ffffff 0%, #edf6ff 100%);
+      cursor:pointer;
+      transition:all .15s ease;
+      font-size:var(--fs-label);
+      user-select:none;
+      color:#0f172a;
+    }
+    .options label.option:hover{
+      border-color:#60a5fa;
+      background:linear-gradient(135deg, #f8fbff 0%, #e0ecff 100%);
+    }
+    .option-text{
+      flex:1;
+      line-height:1.5;
+      color:#0f172a;
+      font-weight:700;
+      text-shadow:none;
+    }
+
+    /* Bigger radio for mobile */
+    .options input[type="radio"]{
+      appearance:none;
+      width:26px;
+      height:26px;
+      min-width:26px;
+      min-height:26px;
+      border:2px solid #9ca3af;
+      border-radius:50%;
+      display:inline-block;
+      position:relative;
+      outline:none;
+      transition:border-color .15s ease, box-shadow .15s ease;
+      background:#fff;
+    }
+    .options input[type="radio"]:checked{
+      border-color:#60a5fa;
+      box-shadow:0 0 0 3px rgba(96,165,250,0.12);
+    }
+    .options input[type="radio"]::after{
+      content:"";
+      position:absolute;
+      inset:5px;
+      border-radius:50%;
+      background:transparent;
+      transition:background .15s ease;
+    }
+    .options input[type="radio"]:checked::after{
+      background:#60a5fa;
+    }
+    .options input[type="radio"]:checked ~ .option-text,
+    .options label.option:has(input:checked) .option-text{
+      color:#0f172a;
+      text-shadow:none;
+    }
+    .options label.option:has(input:checked){
+      background:linear-gradient(135deg, #ffffff 0%, #edf6ff 100%);
+      border-color:#60a5fa;
+      box-shadow:none;
+    }
+
+    /* Correct/Incorrect colors */
+    .option.correct{
+      background:#dcfce7 !important;
+      border-color:var(--ok) !important;
+    }
+    .option.incorrect{
+      background:#fee2e2 !important;
+      border-color:var(--bad) !important;
+    }
+    .result-message{
+      margin-top:12px;
+      padding:10px 12px;
+      border-radius:10px;
+      background:rgba(255,255,255,0.8);
+      border:1px solid rgba(148, 163, 184, 0.4);
+      font-weight:800;
+      line-height:1.5;
+    }
+
+    /* Buttons row (submit + restart) */
+    .actions{
+      position:sticky;
+      bottom:0;
+      left:0; right:0;
+      background:rgba(247,247,251,.85);
+      backdrop-filter: blur(6px);
+      border-top:1px solid var(--border);
+      padding:12px 10px;
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      z-index:5;
+    }
+    .btn{
+      border:0;
+      border-radius:999px;
+      padding:12px 18px;
+      font-weight:700;
+      font-size:var(--fs-btn);
+      cursor:pointer;
+      box-shadow:0 4px 14px rgba(0,0,0,.08);
+      transition:transform .15s ease, box-shadow .15s ease;
+    }
+    .start-quiz-wrap{
+      display:flex;
+      justify-content:flex-start;
+      align-items:center;
+      margin:0;
+    }
+    .start-quiz-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:38px;
+      min-width:116px;
+      padding:8px 11px;
+      border-radius:10px;
+      background:linear-gradient(135deg, #2563eb, #7c3aed);
+      color:#fff;
+      font-size:.8rem;
+      font-weight:800;
+      line-height:1.2;
+      box-shadow:0 8px 18px rgba(37, 99, 235, 0.2);
+      margin-left:0;
+    }
+    .start-quiz-btn:disabled{
+      opacity:0.75;
+      cursor:not-allowed;
+    }
+    .btn:hover{
+      transform:translateY(-1px);
+      box-shadow:0 8px 18px rgba(0,0,0,.12);
+    }
+    .btn-submit{ background:#22c55e; color:#fff; }
+    .btn-final-submit{ background:#7c3aed; color:#fff; }
+    .btn-restart{ background:#ef4444; color:#fff; }
+    #prevBtn,
+    #nextBtn{
+      min-width:150px;
+      font-size:20px;
+      padding:14px 22px;
+      background:linear-gradient(135deg, #2563eb, #7c3aed);
+      color:#fff;
+      box-shadow:none;
+      border:0;
+      outline:none;
+    }
+
+    #prevBtn:hover,
+    #nextBtn:hover{
+      box-shadow:none;
+    }
+
+    /* Score modal */
+    .modal{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.4);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      z-index:50;
+    }
+    .modal .card{
+      background:#fff;
+      border-radius:18px;
+      padding:24px;
+      width:min(520px, 96vw);
+      text-align:center;
+      box-shadow:0 10px 30px rgba(0,0,0,.2);
+    }
+    .score{
+      font-size:28px;
+      font-weight:800;
+      margin:8px 0 2px;
+      color:#111827;
+    }
+    .note{
+      font-size:16px;
+      color:var(--muted);
+      margin-bottom:14px;
+    }
+    .modal .btn{
+      width:100%;
+    }
+    .sr-only{
+      position:absolute!important;
+      height:1px;width:1px;
+      overflow:hidden;clip:rect(1px,1px,1px,1px);
+      white-space:nowrap;border:0;padding:0;margin:-1px;
+    }
+
+    @media (max-width: 480px){
+      body{
+        padding:8px 10px 18px;
+      }
+      .site-header{
+        gap:10px;
+      }
+      .brand{
+        font-size:24px;
+        line-height:1.3;
+      }
+      .social-links{
+        gap:6px;
+      }
+      .social-link{
+        width:34px;
+        height:34px;
+      }
+      .social-link svg{
+        width:18px;
+        height:18px;
+      }
+      h1{
+        font-size:24px;
+        margin-bottom:12px;
+      }
+      .quiz-container{
+        gap:4px;
+      }
+      .question{
+        padding:12px;
+        height:360px;
+      }
+      .question-meta{
+        gap:8px;
+        align-items:center;
+        flex-wrap:wrap;
+      }
+      .meta-box{
+        min-height:36px;
+        padding:7px 10px;
+        font-size:0.9rem;
+      }
+      #questionCounter{
+        min-width:0;
+      }
+      #questionTimer{
+        min-width:90px;
+      }
+      .start-quiz-btn{
+        min-height:34px;
+        min-width:104px;
+        padding:7px 9px;
+        font-size:.76rem;
+      }
+      .q-title{
+        font-size:1.08rem;
+        line-height:1.6;
+        height:auto;
+        margin-bottom:4px;
+        word-break:break-word;
+      }
+      .q-title.dense{
+        font-size:.92rem;
+        line-height:1.4;
+      }
+      .options{
+        gap:8px;
+      }
+      .options label.option{
+        align-items:flex-start;
+        gap:10px;
+        padding:10px 12px;
+      }
+      .option-text{
+        font-size:0.95rem;
+        line-height:1.5;
+        word-break:break-word;
+      }
+      .actions{
+        padding:10px 8px 12px;
+        gap:8px;
+      }
+      .btn{
+        padding:11px 14px;
+        font-size:15px;
+      }
+      #prevBtn,
+      #nextBtn{
+        min-width:110px;
+        padding:12px 14px;
+        font-size:15px;
+      }
+      .modal .card{
+        padding:18px 16px;
+      }
+      .score{
+        font-size:24px;
+      }
+      .note{
+        font-size:14px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="site-header">
+    <div class="brand">My Academy</div>
+    <nav class="social-links" aria-label="Social links">
+      <a class="social-link youtube-link" href="http://www.youtube.com/@CurrentAffirs474" target="_blank" rel="noopener" aria-label="YouTube" title="YouTube">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6-6.3 3.6Z"/></svg>
+      </a>
+      <a class="social-link telegram-link" href="https://t.me/testexamdk" target="_blank" rel="noopener" aria-label="Telegram" title="Telegram">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 2 3 9.5l7.2 2.3L12.5 19l3.4-5.3L22 2Zm-3.2 3.5-6.8 5.2-5.3-1.7 12.1-3.5Z"/></svg>
+      </a>
+      <a class="social-link whatsapp-link" href="https://whatsapp.com/channel/0029Va5aFHK9MF8zXUIKM83k" target="_blank" rel="noopener" aria-label="WhatsApp" title="WhatsApp">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a9.9 9.9 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm0 18.1a8.1 8.1 0 0 1-4.1-1.1l-.3-.2-3.1.8.8-3-.2-.3A8.1 8.1 0 1 1 12 20.1Zm4.4-6.1c-.2-.1-1.3-.6-1.5-.7-.2-.1-.4-.1-.5.1l-.7.9c-.1.1-.3.2-.5.1a6.5 6.5 0 0 1-1.9-1.2 7.2 7.2 0 0 1-1.3-1.6c-.1-.2 0-.3.1-.4l.4-.5c.1-.1.1-.3.2-.4.1-.1 0-.3 0-.4l-.7-1.6c-.2-.4-.4-.4-.5-.4h-.4c-.2 0-.4.1-.6.3a2.4 2.4 0 0 0-.8 1.8c0 1 .7 2 0.8 2.1.1.1 1.4 2.2 3.5 3.1.5.2 1 .4 1.3.5.5.2 1 .1 1.4.1.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.1-1-.1-.1-.2-.1-.4-.2Z"/></svg>
+      </a>
+    </nav>
+  </div>
+  <button class="btn start-quiz-btn" id="startQuizBtn" type="button" style="display:none;">Start Quiz</button>
+
+  <div class="quiz-container" id="quiz" aria-live="polite"></div>
+
+  <div class="actions">
+    <button class="btn btn-submit" id="nextBtn">Next</button>
+    <button class="btn btn-submit" id="submitBtn" style="display:none;">Submit</button>
+    <button class="btn btn-restart" id="restartBtn" style="display:none;">Restart</button>
+  </div>
+
+  <!-- Score Modal -->
+  <div class="modal" id="scoreModal" role="dialog" aria-modal="true" aria-labelledby="scoreTitle" aria-describedby="scoreDesc">
+    <div class="card">
+      <div id="scoreTitle" class="score">आपका स्कोर</div>
+      <div id="scoreDesc" class="note">—</div>
+      <button class="btn btn-submit" id="showAnswersBtn">Restart Quiz</button>
+    </div>
+  </div>
+
+<script>
+/* =========================
+   Q&A DATA
+  Format: Question / Option 1 / Option 2 / Option 3 / Option 4 / Correct option number
+  Questions may be separated by a line break or a blank line. Line breaks inside a question are preserved.
+   Example: भारत की राजधानी क्या है? / मुंबई / दिल्ली / पटना / जयपुर / 2
+   ========================= */
+const quizDataText = `
+परमाणु का धनावेशित कण कौन-सा है? / इलेक्ट्रॉन / प्रोटॉन / न्यूट्रॉन / फोटॉन / 2
+परमाणु में ऋणावेशित कण कौन-सा है? / प्रोटॉन / न्यूट्रॉन / इलेक्ट्रॉन / नाभिक / 3
+तत्व का सबसे छोटा कण क्या कहलाता है? / अणु / परमाणु / कोशिका / आयन / 2
+धनायन किसे कहते हैं? / ऋणावेशित आयन / धनावेशित आयन / उदासीन परमाणु / अणु / 2
+ऋणायन किसे कहते हैं? / धनावेशित आयन / ऋणावेशित आयन / उदासीन आयन / परमाणु / 2
+Na⁺ आयन में कितने इलेक्ट्रॉन होते हैं? / 10 / 11 / 12 / 9 / 1
+Cl⁻ आयन में कितने इलेक्ट्रॉन होते हैं? / 16 / 17 / 18 / 19 / 3
+मैग्नीशियम का परमाणु क्रमांक क्या है? / 10 / 12 / 14 / 16 / 2
+कैल्शियम का परमाणु क्रमांक क्या है? / 18 / 20 / 22 / 24 / 2
+क्लोरीन का परमाणु क्रमांक क्या है? / 15 / 16 / 17 / 18 / 3
+नाइट्रोजन का परमाणु क्रमांक क्या है? / 5 / 6 / 7 / 8 / 3
+फ्लोरीन का परमाणु क्रमांक क्या है? / 7 / 8 / 9 / 10 / 3
+सिलिकॉन का परमाणु क्रमांक क्या है? / 12 / 13 / 14 / 15 / 3
+एल्युमिनियम का परमाणु क्रमांक क्या है? / 11 / 12 / 13 / 14 / 3
+तांबे का रासायनिक प्रतीक क्या है? / Co / Cu / C / Ca / 2
+जिंक का रासायनिक प्रतीक क्या है? / Z / Zn / Zi / Zc / 2
+मैग्नीशियम का प्रतीक क्या है? / M / Mg / Mn / Ma / 2
+कैल्शियम का प्रतीक क्या है? / C / Ca / Cl / Cm / 2
+एल्युमिनियम का प्रतीक क्या है? / Am / Al / A / Au / 2
+पारा का रासायनिक प्रतीक क्या है? / P / Pa / Hg / H / 3
+सीसा का रासायनिक प्रतीक क्या है? / Pb / Ps / Si / Sn / 1
+टिन का रासायनिक प्रतीक क्या है? / Tn / Ti / Sn / Ta / 3
+सोडियम का परमाणु क्रमांक क्या है? / 9 / 10 / 11 / 12 / 3
+पोटैशियम का परमाणु क्रमांक क्या है? / 17 / 18 / 19 / 20 / 3
+कैल्शियम ऑक्साइड का सामान्य नाम क्या है? / बुझा चूना / चूना पत्थर / बिना बुझा चूना / खाने का सोडा / 3
+कैल्शियम हाइड्रॉक्साइड का सामान्य नाम क्या है? / बिना बुझा चूना / बुझा चूना / जिप्सम / संगमरमर / 2
+संगमरमर का मुख्य रासायनिक घटक क्या है? / CaCO₃ / NaCl / SiO₂ / CaO / 1
+कास्टिक सोडा का रासायनिक नाम क्या है? / सोडियम क्लोराइड / सोडियम हाइड्रॉक्साइड / सोडियम कार्बोनेट / पोटैशियम हाइड्रॉक्साइड / 2
+कास्टिक पोटाश का सूत्र क्या है? / KOH / NaOH / KCl / K₂CO₃ / 1
+खाने के नमक का मुख्य स्रोत क्या है? / समुद्री जल / कोयला / पेट्रोलियम / चूना पत्थर / 1
+समुद्री जल से नमक प्राप्त करने की विधि क्या है? / निस्यंदन / वाष्पीकरण / ऊर्ध्वपातन / आसवन / 2
+मिश्रण के घटकों को अलग करने के लिए किस विधि का उपयोग किया जाता है? / पृथक्करण / दहन / ऑक्सीकरण / उदासीनीकरण / 1
+रेत और पानी को किस विधि से अलग किया जा सकता है? / निस्यंदन / आसवन / क्रिस्टलीकरण / ऊर्ध्वपातन / 1
+नमक और पानी को अलग करने के लिए कौन-सी विधि उपयुक्त है? / निस्यंदन / वाष्पीकरण / चुंबकीय पृथक्करण / अवसादन / 2
+दो द्रवों के मिश्रण को अलग करने की विधि क्या कहलाती है? / आसवन / निस्यंदन / ऊर्ध्वपातन / छनाई / 1
+पेट्रोलियम को अलग-अलग अंशों में किस विधि से विभाजित किया जाता है? / सरल आसवन / प्रभाजी आसवन / निस्यंदन / क्रिस्टलीकरण / 2
+कपूर को अशुद्धियों से अलग करने के लिए कौन-सी विधि उपयोगी है? / ऊर्ध्वपातन / निस्यंदन / आसवन / अवसादन / 1
+दूध से क्रीम अलग करने के लिए कौन-सी विधि प्रयोग होती है? / अपकेंद्रण / आसवन / ऊर्ध्वपातन / क्रिस्टलीकरण / 1
+काली स्याही के रंगों को अलग करने की विधि क्या है? / क्रोमैटोग्राफी / निस्यंदन / आसवन / अवसादन / 1
+विलयन में घुलने वाले पदार्थ को क्या कहते हैं? / विलायक / विलेय / अवक्षेप / उत्प्रेरक / 2
+विलयन में अधिक मात्रा में उपस्थित पदार्थ क्या कहलाता है? / विलेय / विलायक / आयन / अवक्षेप / 2
+नमक के पानी में विलायक क्या है? / नमक / पानी / दोनों / कोई नहीं / 2
+नमक के पानी में विलेय क्या है? / पानी / नमक / ऑक्सीजन / हाइड्रोजन / 2
+संतृप्त विलयन क्या होता है? / जिसमें और विलेय नहीं घुल सकता / जिसमें कोई विलेय नहीं है / जिसमें केवल पानी है / जिसमें गैस है / 1
+असंतृप्त विलयन में क्या संभव है? / और विलेय घुल सकता है / विलेय नहीं घुल सकता / पानी नहीं होता / केवल गैस होती है / 1
+कोलॉइड कणों का आकार कैसा होता है? / बहुत बड़ा / बहुत छोटा / मध्यवर्ती / शून्य / 3
+टिंडल प्रभाव किसमें देखा जाता है? / कोलॉइड / शुद्ध जल / तत्व / धातु / 1
+प्रकाश के प्रकीर्णन को क्या कहते हैं? / टिंडल प्रभाव / फोटोइलेक्ट्रिक प्रभाव / डॉप्लर प्रभाव / जूल प्रभाव / 1
+साबुन का जलीय विलयन कैसा होता है? / अम्लीय / क्षारीय / उदासीन / गैसीय / 2
+साबुन बनाने की प्रक्रिया को क्या कहते हैं? / साबुनीकरण / आसवन / अपघटन / दहन / 1
+साबुन मुख्यतः किसका लवण है? / उच्च वसीय अम्ल / खनिज अम्ल / कार्बोनिक अम्ल / नाइट्रिक अम्ल / 1
+डिटर्जेंट सामान्यतः किस प्रकार के जल में अधिक प्रभावी होते हैं? / कठोर जल / केवल आसुत जल / वर्षा जल / शुद्ध जल / 1
+कठोर जल में मुख्यतः किन आयनों की उपस्थिति होती है? / Na⁺ और K⁺ / Ca²⁺ और Mg²⁺ / H⁺ और OH⁻ / Fe³⁺ और Al³⁺ / 2
+कठोर जल को मुलायम करने के लिए किसका उपयोग किया जाता है? / धुलाई का सोडा / चीनी / नमक / सिरका / 1
+जल की कठोरता दूर करने के लिए कौन-सी विधि प्रयोग की जाती है? / आयन-विनिमय / दहन / ऊर्ध्वपातन / गलन / 1
+अम्ल वर्षा का मुख्य कारण क्या है? / SO₂ और NOₓ / O₂ और N₂ / H₂ और O₂ / He और Ne / 1
+अम्ल वर्षा का pH सामान्यतः कैसा होता है? / 7 से अधिक / 7 / 5.6 से कम / 14 / 3
+ग्रीनहाउस गैस कौन-सी है? / CO₂ / O₂ / N₂ / He / 1
+वैश्विक तापन में प्रमुख योगदान देने वाली गैस कौन-सी है? / CO₂ / O₂ / H₂ / Ne / 1
+मीथेन का रासायनिक सूत्र क्या है? / CH₄ / C₂H₆ / C₂H₄ / CH₃OH / 1
+एथेन का सूत्र क्या है? / CH₄ / C₂H₆ / C₂H₄ / C₃H₈ / 2
+एथीन का सूत्र क्या है? / C₂H₆ / C₂H₄ / C₂H₂ / CH₄ / 2
+एथाइन का सूत्र क्या है? / C₂H₂ / C₂H₄ / C₂H₆ / CH₄ / 1
+अल्कोहल का क्रियात्मक समूह कौन-सा है? / –OH / –COOH / –CHO / –CO– / 1
+कार्बोक्सिलिक अम्ल का क्रियात्मक समूह कौन-सा है? / –OH / –COOH / –NH₂ / –CHO / 2
+एल्डिहाइड का क्रियात्मक समूह क्या है? / –CHO / –COOH / –OH / –NH₂ / 1
+अमीन का क्रियात्मक समूह क्या है? / –NH₂ / –OH / –COOH / –CHO / 1
+एथेनॉल का ऑक्सीकरण करने पर क्या बन सकता है? / एसीटिक अम्ल / मीथेन / एथेन / ग्लूकोज / 1
+कार्बन की संयोजकता कितनी होती है? / 2 / 3 / 4 / 5 / 3
+ऑक्सीजन की सामान्य संयोजकता कितनी होती है? / 1 / 2 / 3 / 4 / 2
+हाइड्रोजन की संयोजकता कितनी होती है? / 1 / 2 / 3 / 4 / 1
+नाइट्रोजन की सामान्य संयोजकता क्या हो सकती है? / 1 / 3 / 5 / 3 और 5 / 4
+क्लोरीन की सामान्य संयोजकता कितनी है? / 1 / 2 / 3 / 4 / 1
+आयनिक बंध किसके बीच बनता है? / धातु और अधातु / दो निष्क्रिय गैस / दो धातु / दो समान अधातु / 1
+सहसंयोजक बंध में क्या होता है? / इलेक्ट्रॉनों का स्थानांतरण / इलेक्ट्रॉनों की साझेदारी / प्रोटॉन की साझेदारी / न्यूट्रॉन का स्थानांतरण / 2
+NaCl में किस प्रकार का बंध होता है? / सहसंयोजक / आयनिक / धात्विक / हाइड्रोजन / 2
+H₂O में मुख्यतः किस प्रकार का बंध होता है? / आयनिक / सहसंयोजक / धात्विक / नाभिकीय / 2
+धातुओं में कौन-सा बंध पाया जाता है? / आयनिक / धात्विक / सहसंयोजक / हाइड्रोजन / 2
+हाइड्रोजन बंध किस अणु में पाया जाता है? / H₂O / CH₄ / CO₂ / NaCl / 1
+धातु सामान्यतः विद्युत के कैसे चालक होते हैं? / कुचालक / सुचालक / अर्धचालक / कोई नहीं / 2
+अधातु सामान्यतः कैसे होते हैं? / चमकीले / भंगुर / तन्य / सुचालक / 2
+धातुओं को पीटकर चादर बनाने के गुण को क्या कहते हैं? / तन्यता / आघातवर्धनीयता / कठोरता / भंगुरता / 2
+धातु को तार में खींचने के गुण को क्या कहते हैं? / तन्यता / आघातवर्धनीयता / चमक / कठोरता / 1
+धातुओं की चमक को क्या कहते हैं? / धात्विक चमक / तन्यता / भंगुरता / चालकता / 1
+कौन-सी धातु सबसे अच्छी विद्युत चालक है? / लोहा / चाँदी / सीसा / पारा / 2
+कौन-सी धातु कमरे के तापमान पर द्रव होती है? / सोडियम / पारा / एल्युमिनियम / जिंक / 2
+कौन-सी धातु चाकू से आसानी से काटी जा सकती है? / सोडियम / लोहा / तांबा / जिंक / 1
+धातुओं की अम्ल के साथ अभिक्रिया में सामान्यतः कौन-सी गैस निकलती है? / ऑक्सीजन / हाइड्रोजन / नाइट्रोजन / क्लोरीन / 2
+जिंक की HCl के साथ अभिक्रिया में कौन-सी गैस निकलती है? / H₂ / O₂ / CO₂ / N₂ / 1
+विस्थापन अभिक्रिया में क्या होता है? / एक तत्व दूसरे को विस्थापित करता है / दो अम्ल मिलते हैं / केवल गैस बनती है / कोई परिवर्तन नहीं / 1
+संयोजन अभिक्रिया में कितने पदार्थ मिलकर एक उत्पाद बनाते हैं? / एक / दो या अधिक / केवल तीन / कोई नहीं / 2
+अपघटन अभिक्रिया में क्या होता है? / एक पदार्थ कई पदार्थों में टूटता है / कई पदार्थ एक बनते हैं / कोई परिवर्तन नहीं / केवल गैस बनती है / 1
+ऊष्माक्षेपी अभिक्रिया में क्या निकलता है? / ऊष्मा / प्रकाश ही / ध्वनि ही / ठंडक / 1
+ऊष्माशोषी अभिक्रिया में क्या अवशोषित होता है? / ऊष्मा / ऑक्सीजन / नाइट्रोजन / प्रकाश / 1
+श्वसन किस प्रकार की अभिक्रिया है? / ऊष्माक्षेपी / ऊष्माशोषी / विस्थापन / अपघटन / 1
+प्रकाश संश्लेषण में कौन-सी गैस प्रयुक्त होती है? / CO₂ / O₂ / N₂ / H₂ / 1
+प्रकाश संश्लेषण में कौन-सी गैस निकलती है? / CO₂ / O₂ / N₂ / H₂ / 2
+क्लोरोफिल का रंग कैसा होता है? / लाल / हरा / पीला / नीला / 2
+रासायनिक अभिक्रिया में नए पदार्थ बनने का संकेत क्या हो सकता है? / रंग परिवर्तन / केवल आकार परिवर्तन / केवल स्थिति परिवर्तन / कोई परिवर्तन नहीं / 1
+रासायनिक अभिक्रिया में गैस निकलने का उदाहरण कौन-सा है? / अम्ल और धातु की अभिक्रिया / पानी जमना / बर्फ पिघलना / पानी उबलना / 1
+
+
+
+
+`;
+
+const recordPattern = /([\s\S]*?)\s*\/\s*([^/]*?)\s*\/\s*([^/]*?)\s*\/\s*([^/]*?)\s*\/\s*([^/]*?)\s*\/\s*([1-4])(?=\s|$)/g;
+const quizData = [...quizDataText.trim().matchAll(recordPattern)].map((match, index) => {
+  const fields = match.slice(1).map((field) => field.trim());
+  if (fields.length !== 6) {
+    throw new Error(`Question ${index + 1} must have 6 fields separated by /`);
+  }
+  const correctOption = Number(fields[5]);
+  if (!Number.isInteger(correctOption) || correctOption < 1 || correctOption > 4) {
+    throw new Error(`Question ${index + 1} correct option must be a number from 1 to 4`);
+  }
+  return { q: fields[0], o: fields.slice(1, 5), a: correctOption - 1 };
+});
+
+function formatQuestion(question) {
+  return /[?؟]\s*$/.test(question) ? question : `${question}?`;
+}
+
+/* ================
+   Sequential quiz flow
+   ================ */
+const quizEl = document.getElementById("quiz");
+const startQuizBtn = document.getElementById("startQuizBtn");
+const nextBtn = document.getElementById("nextBtn");
+const submitBtn = document.getElementById("submitBtn");
+const restartBtn = document.getElementById("restartBtn");
+const scoreModal = document.getElementById("scoreModal");
+const scoreTitle = document.getElementById("scoreTitle");
+const scoreDesc = document.getElementById("scoreDesc");
+const showAnswersBtn = document.getElementById("showAnswersBtn");
+let currentQuestionIndex = 0;
+let reviewMode = false;
+let questionTimerId = null;
+const totalTimeSeconds = 3600;
+let timeLeft = totalTimeSeconds;
+let timerStarted = false;
+const userAnswers = new Array(quizData.length).fill(null);
+
+function formatTime(totalSeconds) {
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  return [hours, minutes, seconds].map((value) => String(value).padStart(2, "0")).join(":");
+}
+
+function clearQuestionTimer() {
+  if (questionTimerId) {
+    clearInterval(questionTimerId);
+    questionTimerId = null;
+  }
+}
+
+function startQuestionTimer() {
+  clearQuestionTimer();
+  if (reviewMode) return;
+
+  timerStarted = true;
+  const timerBox = document.getElementById("questionTimer");
+  if (timerBox) {
+    timerBox.textContent = `Time: ${formatTime(timeLeft)}`;
+  }
+
+  questionTimerId = setInterval(() => {
+    timeLeft -= 1;
+    if (timerBox) {
+      timerBox.textContent = `Time: ${formatTime(timeLeft)}`;
+    }
+
+    if (timeLeft <= 0) {
+      clearQuestionTimer();
+      submitQuiz();
+    }
+  }, 1000);
+}
+
+function updateControls() {
+  const isLast = currentQuestionIndex === quizData.length - 1;
+
+  nextBtn.style.display = reviewMode ? (isLast ? "none" : "inline-block") : "inline-block";
+  submitBtn.style.display = "none";
+  restartBtn.style.display = reviewMode ? "inline-block" : "none";
+
+  nextBtn.textContent = isLast && !reviewMode ? "Submit" : "Next";
+}
+
+function showStartScreen() {
+  clearQuestionTimer();
+  timerStarted = false;
+  timeLeft = totalTimeSeconds;
+  reviewMode = false;
+  currentQuestionIndex = 0;
+  quizEl.innerHTML = "";
+  startQuizBtn.style.display = "inline-flex";
+}
+
+function startQuiz() {
+  timeLeft = totalTimeSeconds;
+  timerStarted = true;
+  reviewMode = false;
+  currentQuestionIndex = 0;
+  startQuizBtn.style.display = "none";
+  renderQuestion();
+}
+
+function renderQuestion() {
+  clearQuestionTimer();
+  quizEl.innerHTML = "";
+
+  const currentQuestion = quizData[currentQuestionIndex];
+  const selectedAnswer = userAnswers[currentQuestionIndex];
+  const questionAnswered = selectedAnswer !== null;
+
+  const metaRow = document.createElement("div");
+  metaRow.className = "question-meta";
+
+  const startWrap = document.createElement("div");
+  startWrap.className = "start-quiz-wrap";
+  startWrap.appendChild(startQuizBtn);
+
+  const quizTitle = document.createElement("h1");
+  quizTitle.id = "quizTitle";
+  quizTitle.textContent = "100 Gk";
+
+  const counter = document.createElement("div");
+  counter.id = "questionCounter";
+  counter.className = "meta-box";
+  counter.textContent = `Question ${currentQuestionIndex + 1}/${quizData.length}`;
+
+  const timer = document.createElement("div");
+  timer.id = "questionTimer";
+  timer.className = "meta-box";
+  timer.textContent = `Time: ${formatTime(timerStarted ? timeLeft : totalTimeSeconds)}`;
+
+  metaRow.appendChild(counter);
+  metaRow.appendChild(startWrap);
+  metaRow.appendChild(quizTitle);
+  metaRow.appendChild(timer);
+  startQuizBtn.style.display = timerStarted || reviewMode ? "none" : "inline-flex";
+  quizEl.appendChild(metaRow);
+
+  const card = document.createElement("div");
+  card.className = "question";
+
+  const title = document.createElement("p");
+  title.className = "q-title";
+  title.textContent = `${String(currentQuestionIndex + 1).padStart(2, "0")}. ${formatQuestion(currentQuestion.q)}`;
+
+  const opts = document.createElement("div");
+  opts.className = "options";
+
+  currentQuestion.o.forEach((opt, optionIndex) => {
+    const id = `q${currentQuestionIndex}-o${optionIndex}`;
+    const label = document.createElement("label");
+    label.className = "option";
+    label.setAttribute("for", id);
+
+    const input = document.createElement("input");
+    input.type = "radio";
+    input.id = id;
+    input.name = `q${currentQuestionIndex}`;
+    input.value = optionIndex;
+    input.checked = selectedAnswer === optionIndex;
+
+    if (reviewMode || questionAnswered) {
+      input.disabled = true;
+      if (optionIndex === currentQuestion.a) {
+        label.classList.add("correct");
+      }
+      if (selectedAnswer === optionIndex && selectedAnswer !== currentQuestion.a) {
+        label.classList.add("incorrect");
+      }
+    } else {
+      input.addEventListener("change", () => {
+        userAnswers[currentQuestionIndex] = Number(input.value);
+        if (!timerStarted) {
+          timeLeft = totalTimeSeconds;
+          timerStarted = true;
+          startQuestionTimer();
+        }
+        renderQuestion();
+      });
+    }
+
+    const span = document.createElement("span");
+    span.className = "option-text";
+    span.textContent = opt;
+
+    label.appendChild(input);
+    label.appendChild(span);
+    opts.appendChild(label);
+  });
+
+  card.appendChild(title);
+  card.appendChild(opts);
+
+  if (reviewMode || questionAnswered) {
+    const result = document.createElement("div");
+    result.className = "result-message";
+    result.style.display = "none";
+    card.appendChild(result);
+  }
+
+  quizEl.appendChild(card);
+
+  title.style.height = "auto";
+  const lineHeight = parseFloat(getComputedStyle(title).lineHeight);
+  if (title.scrollHeight > lineHeight * 3 + 1) {
+    title.classList.add("dense");
+  }
+  title.style.height = "";
+
+  updateControls();
+
+  if (!reviewMode && timerStarted) {
+    startQuestionTimer();
+  }
+}
+
+function showAnswers() {
+  clearQuestionTimer();
+  timerStarted = false;
+  reviewMode = true;
+  currentQuestionIndex = 0;
+  renderQuestion();
+  scoreModal.style.display = "none";
+}
+
+function submitQuiz() {
+  clearQuestionTimer();
+  timerStarted = false;
+
+  let score = 0;
+  let attempted = 0;
+  quizData.forEach((item, qi) => {
+    if (userAnswers[qi] !== null) {
+      attempted++;
+      if (Number(userAnswers[qi]) === item.a) score++;
+    }
+  });
+
+  scoreTitle.textContent = `आपका स्कोर: ${score}/${quizData.length}`;
+  const incorrect = attempted - score;
+  const notAttempted = quizData.length - attempted;
+  scoreDesc.textContent = `सही उत्तर: ${score} • गलत उत्तर: ${incorrect} • Not Attempted: ${notAttempted}`;
+  scoreModal.style.display = "flex";
+}
+
+nextBtn.addEventListener("click", () => {
+  if (reviewMode) {
+    if (currentQuestionIndex < quizData.length - 1) {
+      currentQuestionIndex += 1;
+      renderQuestion();
+    }
+  } else {
+    if (!timerStarted) {
+      timeLeft = totalTimeSeconds;
+      timerStarted = true;
+    }
+
+    if (currentQuestionIndex < quizData.length - 1) {
+      currentQuestionIndex += 1;
+      renderQuestion();
+    } else {
+      submitQuiz();
+    }
+  }
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+submitBtn.addEventListener("click", submitQuiz);
+
+startQuizBtn.addEventListener("click", startQuiz);
+showAnswersBtn.addEventListener("click", restartQuiz);
+
+function restartQuiz() {
+  clearQuestionTimer();
+  timerStarted = false;
+  timeLeft = totalTimeSeconds;
+  reviewMode = false;
+  currentQuestionIndex = 0;
+  userAnswers.fill(null);
+  scoreModal.style.display = "none";
+  renderQuestion();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+restartBtn.addEventListener("click", restartQuiz);
+
+scoreModal.addEventListener("click", (e) => {
+  if (e.target === scoreModal) scoreModal.style.display = "none";
+});
+
+renderQuestion();
+
+</script>
+</body>
+</html>
